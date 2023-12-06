@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments::page_head('Home - TechWorld Admin','none')"></head>
+<body>
+<div class="wrapper">
+    <!--sidebar wrapper -->
+    <div th:replace="navigation::sidebar_menu"></div>
+    <!--end sidebar wrapper -->
+    <!--start header -->
+    <header th:replace="navigation::header_menu"></header>
+    <!--end header -->
+    <div class="page-wrapper">
+        <div class="page-content">
+            <div class="row">
+                <div class="col-lg-8 mx-auto">
+                    <div class="card">
+                        <div class="card-header px-4 py-3">
+                            <h5 class="mb-0">Manage Category | [[${pageTitle}]]</h5>
+                        </div>
+                        <div class="card-body p-4">
+                            <form id="jQueryValidationForm" method="post" th:action="@{/categories/save}" th:object="${category}" novalidate="novalidate"
+                                  enctype="multipart/form-data" onsubmit="return checkUnique(this)">
+                                <input type="hidden" th:field="*{id}"/>
+
+                                <div class="row mb-3">
+                                    <label for="input35" class="col-sm-3 col-form-label">Enter Category Name</label>
+                                    <div class="col-sm-9">
+                                        <input type="text" th:field="*{name}" class="form-control valid" id="input35" name="name" placeholder="Category Name" aria-invalid="false">
+                                        <label id="input35-error" class="error" for="input35" style="display: none;"></label>
+                                    </div>
+                                </div>
+
+                                <div class="row mb-3">
+                                    <label class="col-sm-3 col-form-label">Enable</label>
+                                    <div class="col-sm-9">
+                                        <div class="form-check form-switch form-check-success">
+                                            <input class="form-check-input" name="enable" type="checkbox" role="switch" id="flexSwitchCheckSuccess" th:field="*{enabled}">
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row mb-3">
+                                    <label for="input36" class="col-sm-3 col-form-label">Photo</label>
+                                    <div class="col-sm-9">
+                                        <input type="hidden" th:field="*{image}"/>
+                                        <input class="form-control valid" id="input36" type="file" accept="image/png, image/jpeg" name="fileImage" aria-invalid="false">
+                                        <img th:if="${category.image == null}" class="img-fluid thumbnail mt-2" style="width: 100px; height: 100px;" alt="photo default" th:src="@{/images/category_icon.png}"/>
+                                        <img th:if="${category.image != null}" class="thumbnail mt-2" style="width: 100px; height: 100px" th:src="${category.image}"/>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <label class="col-sm-3 col-form-label"></label>
+                                    <div class="col-sm-9">
+                                        <div class="d-md-flex d-grid align-items-center gap-3">
+                                            <button type="submit" class="btn btn-primary px-4" name="submit2">Submit</button>
+                                            <button type="reset" class="btn btn-light px-4">Reset</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer th:replace="fragments::footer"></footer>
+</div>
+<script type="text/javascript" th:src="@{/js/common.js}"></script>
+<script type="text/javascript" th:src="@{/js/jquery.validate.min.js}"></script>
+<script type="text/javascript" th:src="@{/js/validation_category.js}"></script>
+<script>
+    modelURL = "[[@{/categories}]]";
+
+    $(document).ready(function (){
+        $("#input36").change(function (){
+            var file = this.files[0];
+            var reader = new FileReader();
+            reader.onload = function (e){
+                $(".thumbnail").attr("src",e.target.result);
+            };
+            reader.readAsDataURL(file);
+        });
+    });
+
+    function checkUnique(form){
+        if($("#jQueryValidationForm").valid()){
+            const catId = $("#id").val();
+            const catName = $("#input35").val();
+            const csrfValue = $("input[name='_csrf']").val();
+
+            const url = "[[@{/categories/check_unique}]]";
+            const params = {id: catId, name: catName, _csrf: csrfValue};
+            $.post(url,params, function(response){
+                if(response === "OK"){
+                    form.submit();
+                }else if(response === "DuplicateName"){
+                    warning_noti("There is another category having same name " + catName);
+                }else {
+                    error_noti("Unknown response from server");
+                }
+            }).fail(function (){
+                error_noti("Could not connect to the server");
+            });
+            return false;
+        }
+    }
+</script>
+</body>
+</html>

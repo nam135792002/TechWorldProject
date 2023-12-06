@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments::page_head(${pageTitle},'none')"></head>
+<body>
+<div class="wrapper">
+    <!--sidebar wrapper -->
+    <div th:replace="navigation::sidebar_menu"></div>
+    <!--end sidebar wrapper -->
+    <!--start header -->
+    <header th:replace="navigation::header_menu"></header>
+    <!--end header -->
+
+
+
+    <div class="page-wrapper">
+        <div class="page-content">
+            <div class="row">
+                <div class="col-lg-8 mx-auto">
+                    <div class="card">
+                        <div class="card-header px-4 py-3">
+                            <h5 class="mb-0">[[${pageTitle}]]</h5>
+                        </div>
+                        <div class="card-body p-4">
+                            <form id="jQueryValidationForm" method="post" th:action="@{/users/save}" th:object="${user}" novalidate="novalidate"
+                                  enctype="multipart/form-data" onsubmit="return checkEmailUnique(this);">
+                                <input type="hidden" th:field="*{id}"/>
+
+                                <div class="row mb-3">
+                                    <label for="input35" class="col-sm-3 col-form-label">Enter Your First Name</label>
+                                    <div class="col-sm-9">
+                                        <input type="text" th:field="*{firstName}" class="form-control valid" id="input35" name="firstName" placeholder="Enter Your First Name" aria-invalid="false">
+                                        <label id="input35-error" class="error" for="input35" style="display: none;"></label>
+                                    </div>
+                                </div>
+
+                                <div class="row mb-3">
+                                    <label for="input42" class="col-sm-3 col-form-label">Enter Your Last Name</label>
+                                    <div class="col-sm-9">
+                                        <input type="text" th:field="*{lastName}" class="form-control valid" id="input42" name="lastName" placeholder="Enter Your Last Name" aria-invalid="false">
+                                        <label id="input42-error" class="error" for="input42" style="display: none;"></label>
+                                    </div>
+                                </div>
+
+                                <div class="row mb-3">
+                                    <label for="input37" class="col-sm-3 col-form-label">Email Address</label>
+                                    <div class="col-sm-9">
+                                        <input type="email" th:field="*{email}" class="form-control valid" id="input37" name="email" placeholder="Enter Your Email Address" aria-invalid="false">
+                                    </div>
+                                </div>
+
+                                <div class="row mb-3">
+                                    <label for="input45" class="col-sm-3 col-form-label">Phone Number</label>
+                                    <div class="col-sm-9">
+                                        <input type="text" th:field="*{phoneNumber}" class="form-control valid" id="input45" name="phoneNumber" placeholder="Enter Your Phone Number" aria-invalid="false">
+                                        <label id="input45-error" class="error" for="input45" style="display: none;"></label>
+                                    </div>
+                                </div>
+
+                                <div th:if="${user.id == null}" class="row mb-3">
+                                    <label for="input38" class="col-sm-3 col-form-label">Choose Password</label>
+                                    <div class="col-sm-9">
+                                        <input type="password" th:field="*{password}" class="form-control valid validate-equalTo-blur" id="input38" name="password" placeholder="Choose Password" aria-invalid="false">
+                                        <label id="input38-error" class="error" for="input38" style="display: none;"></label>
+                                    </div>
+                                </div>
+
+                                <div th:if="${user.id != null}" class="row mb-3">
+                                    <label for="input46" class="col-sm-3 col-form-label">Choose Password</label>
+                                    <div class="col-sm-9">
+                                        <input type="password" th:field="*{password}" id="input46" class="form-control" placeholder="Leave blank if you don't want to change password">
+                                        <label id="input46-error" class="error" for="input46" style="display: none;"></label>
+                                    </div>
+                                </div>
+
+                                <div th:if="${user.id == null}" class="row mb-3">
+                                    <label for="input44" class="col-sm-3 col-form-label">Confirm Password</label>
+                                    <div class="col-sm-9">
+                                        <input type="password" class="form-control valid" id="input44" name="confirm_password" placeholder="Confirm Password" aria-invalid="false">
+                                    </div>
+                                </div>
+
+                                <div th:if="${user.id != null}" class="row mb-3">
+                                    <label for="input48" class="col-sm-3 col-form-label">Confirm Password</label>
+                                    <div class="col-sm-9">
+                                        <input type="password" class="form-control valid" id="input48" name="confirm_password" placeholder="Confirm Password" aria-invalid="false">
+                                    </div>
+                                </div>
+
+                                <div class="row mb-3">
+                                    <label for="input39" class="col-sm-3 col-form-label">Select Role</label>
+                                    <div class="col-sm-9">
+                                        <select class="form-select valid" id="input39" th:field="*{role}" name="role" aria-invalid="false">
+                                            <option value="" selected>Choose...</option>
+                                            <th:block th:each="role : ${listRoles}">
+                                                <option th:value="${role.id}" th:text="${role.descriptionRole}"></option>
+                                            </th:block>
+                                        </select>
+                                        <label id="input39-error" class="error" for="input39" style="display: none;"></label>
+                                    </div>
+                                </div>
+
+                                <div class="row mb-3">
+                                    <label class="col-sm-3 col-form-label">Enable</label>
+                                    <div class="col-sm-9">
+                                        <div class="form-check form-switch form-check-success">
+                                            <input class="form-check-input" name="enable" type="checkbox" role="switch" id="flexSwitchCheckSuccess" th:field="*{enabled}">
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row mb-3">
+                                    <label class="col-sm-3 col-form-label">Photo</label>
+                                    <div class="col-sm-9">
+                                        <input type="hidden" th:field="*{photos}"/>
+                                        <input class="form-control valid" id="fileImage" type="file" accept="image/png, image/jpeg" name="image">
+                                        <img th:if="${user.photos == null}" class="img-fluid thumbnail mt-2" style="width: 100px; height: 100px;" alt="photo default" th:src="@{/images/personal.png}"/>
+                                        <img th:if="${user.photos != null}" class="thumbnail mt-2" style="width: 100px; height: 100px" th:src="${user.photos}"/>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <label class="col-sm-3 col-form-label"></label>
+                                    <div class="col-sm-9">
+                                        <div class="d-md-flex d-grid align-items-center gap-3">
+                                            <button type="submit" class="btn btn-primary px-4" name="submit2">Submit</button>
+                                            <button type="reset" class="btn btn-light px-4">Reset</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer th:replace="fragments::footer"></footer>
+</div>
+<script type="text/javascript" th:src="@{/js/common.js}"></script>
+<script type="text/javascript" th:src="@{/js/jquery.validate.min.js}"></script>
+<script type="text/javascript" th:src="@{/js/validation-script.js}"></script>
+<script>
+    $(document).ready(function (){
+        $("#fileImage").change(function (){
+            var file = this.files[0];
+            var reader = new FileReader();
+            reader.onload = function (e){
+                $(".thumbnail").attr("src",e.target.result);
+            };
+            reader.readAsDataURL(file);
+        });
+    });
+
+    function checkEmailUnique(form){
+        if($("#jQueryValidationForm").valid()){
+            const url = "[[@{/users/check_email}]]";
+            const userEmail = $("#input37").val();
+            const userId = $("#id").val();
+            const csrfValue = $("input[name='_csrf']").val();
+            const params = {id : userId , email: userEmail, _csrf: csrfValue};
+
+            $.post(url,params, function (response){
+                if(response === "OK"){
+                    form.submit();
+                } else if(response === "Duplicated"){
+                    warning_noti('There is another user having the email ' + userEmail);
+                } else {
+                    error_noti('Unknown response from server');
+                }
+            }).fail(function (){
+                error_noti('Could not connect to the server');
+            });
+            return false;
+        }
+    }
+</script>
+</body>
+</html>

@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments::page_head(${pageTitle},'none')"></head>
+<body>
+<div class="wrapper">
+    <!--sidebar wrapper -->
+    <div th:replace="navigation::sidebar_menu"></div>
+    <!--end sidebar wrapper -->
+    <!--start header -->
+    <header th:replace="navigation::header_menu"></header>
+    <!--end header -->
+    <div class="page-wrapper">
+        <div class="page-content">
+            <div class="row">
+                <div class="col-lg-8 mx-auto">
+                    <div class="card">
+                        <div class="card-header px-4 py-3">
+                            <h5 class="mb-0">Manage Review | [[${pageTitle}]]</h5>
+                        </div>
+                        <div class="card-body p-4">
+                            <form id="jQueryValidationForm" method="post" th:action="@{/reviews/save}" th:object="${review}" novalidate="novalidate">
+                                <input type="hidden" th:field="*{id}"/>
+
+                                <div class="row mb-3">
+                                    <label for="input35" class="col-sm-3 col-form-label">Product</label>
+                                    <div class="col-sm-9">
+                                        <input type="text" th:value="${review.product.shortName}" class="form-control valid" readonly="readonly"  aria-invalid="false" id="input35">
+                                    </div>
+                                </div>
+
+                                <div class="row mb-3">
+                                    <label for="input36" class="col-sm-3 col-form-label">Customer</label>
+                                    <div class="col-sm-9">
+                                        <input type="text" th:value="${review.customer.fullName}" class="form-control valid" readonly="readonly" aria-invalid="false" id="input36">
+                                    </div>
+                                </div>
+
+                                <div class="row mb-3">
+                                    <label for="input39" class="col-sm-3 col-form-label">Rating</label>
+                                    <div class="col-sm-9">
+                                        <input type="text" th:value="${review.rating}" class="form-control valid" readonly="readonly"  aria-invalid="false" id="input39">
+                                    </div>
+                                </div>
+
+                                <div class="row mb-3">
+                                    <label for="input40" class="col-sm-3 col-form-label">Review Time</label>
+                                    <div class="col-sm-9">
+                                        <input type="text" th:value="${review.updatedTimeOnForm}" class="form-control valid" readonly="readonly"  aria-invalid="false" id="input40">
+                                    </div>
+                                </div>
+
+                                <div class="row mb-3">
+                                    <label for="input41" class="col-sm-3 col-form-label">Headline</label>
+                                    <div class="col-sm-9">
+                                        <input type="text" class="form-control valid" th:field="*{headline}" minlength="20" maxlength="128" required  aria-invalid="false" id="input41">
+                                    </div>
+                                </div>
+
+                                <div class="row mb-3">
+                                    <label for="input42" class="col-sm-3 col-form-label">Review Time</label>
+                                    <div class="col-sm-9">
+                                        <input type="text" class="form-control valid" th:field="*{comment}" minlength="30" maxlength="300" required aria-invalid="false" id="input42">
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <label class="col-sm-3 col-form-label"></label>
+                                    <div class="col-sm-9">
+                                        <div class="d-md-flex d-grid align-items-center gap-3">
+                                            <button type="submit" class="btn btn-primary px-4" name="submit2">Submit</button>
+                                            <input type="button" value="Cancel" class="btn btn-secondary" id="buttonCancel"/>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer th:replace="fragments::footer"></footer>
+</div>
+<script type="text/javascript" th:src="@{/js/common.js}"></script>
+<script type="text/javascript">
+    modelURL = "[[@{/reviews}]]";
+    $(document).ready(function (){
+        $("#buttonCancel").on("click", function (){
+            window.location = modelURL;
+        });
+    });
+</script>
+</body>
+</html>

@@ -1,0 +1,37 @@
+.pro-qty-cart-nam{
+    width: 130px;
+    border-radius: 50px;
+}
+
+.pro-qty-cart-nam .cart-item-quantity{
+    width: 32px;
+    display: block;
+    float: left;
+    line-height: 26px;
+    cursor: pointer;
+    text-align: center;
+    font-size: 16px;
+    font-weight: 300;
+    color: #000;
+    height: 32px;
+    background: #f6f7fb;
+    border-radius: 50%;
+    transition: .3s;
+    border: 2px solid rgba(0,0,0,0);
+}
+
+.pro-qty-cart-nam input{
+    width: 28px;
+    float: left;
+    border: none;
+    height: 32px;
+    line-height: 30px;
+    padding: 0;
+    text-align: center;
+    background-color: rgba(0,0,0,0);
+    font-size: 20px;
+    font-weight: 500;
+    margin: 0 12px;
+    color: #27272e;
+}
+

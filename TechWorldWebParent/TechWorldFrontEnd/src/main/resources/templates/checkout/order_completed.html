@@ -1,0 +1,44 @@
+<!doctype html>
+<html class="no-js" lang="vi" xmlns:th="http://www.thymeleaf.org">
+<header th:replace="fragments::page_head('Order_Success', 'none')"></header>
+<body class="sticky-header newsletter-popup-modal">
+<a href="#top" class="back-to-top" id="backto-top"><i class="fal fa-arrow-up"></i></a>
+<!-- Start Header -->
+<header class="header axil-header header-style-5">
+    <div id="axil-sticky-placeholder"></div>
+    <div th:replace="fragments::navbar_version_beta"></div>
+    <div th:replace="fragments::advertisement"></div>
+</header>
+<!-- End Header -->
+
+<main class="main-wrapper">
+    <div class="axil-shop-area axil-section-gap bg-color-white">
+        <div class="container">
+            <div class="text-center border border-secondary rounded m-3 p-3">
+                <h2>Đã lên đơn hàng thành công</h2>
+                <h4>Email của đơn hàng sẽ được gửi đến bạn. Vui lòng kiểm tra email</h4>
+            </div>
+        </div>
+    </div>
+    <div th:replace="fragments::newsletterr"></div>
+</main>
+
+<div th:replace="fragments::banner"></div>
+
+<!-- Start Footer Area  -->
+<footer th:replace="fragments::footer"></footer>
+<!-- End Footer Area  -->
+
+<!-- Header Search Modal End -->
+<div th:replace="fragments::search-product"></div>
+<!-- Header Search Modal End -->
+<div th:replace="fragments::js"></div>
+<script type="text/javascript">
+    modelURL = "[[@{/}]]";
+    $(document).ready(function () {
+        $("#cart-count-by-customer").text(0);
+    });
+</script>
+<script type="text/javascript" th:src="@{/js/search.js}"></script>
+</body>
+</html>

@@ -1,0 +1,40 @@
+<div class="modal-header">
+    <h5 class="modal-title">Feedback Details</h5>
+    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+</div>
+<div class="modal-body">
+    <div class="row g-3">
+        <div class="col-12 col-lg-6">
+            <label for="id" class="form-label">Feedback ID</label>
+            <input type="text" class="form-control" readonly th:value="${feed.id}" id="id" />
+        </div>
+        <div class="col-12 col-lg-6">
+            <label for="name" class="form-label">Full Name</label>
+            <input type="text" class="form-control" readonly th:value="${feed.fullName}" id="name" />
+        </div>
+        <div class="col-12 col-lg-6">
+            <label for="email" class="form-label">Email</label>
+            <input type="text" class="form-control" readonly th:value="${feed.email}" id="email"/>
+        </div>
+
+        <div class="col-12 col-lg-6">
+            <label for="phone-number" class="form-label">Phone Number</label>
+            <input type="text" class="form-control" readonly th:value="${feed.phoneNumber}" id="phone-number"/>
+        </div>
+        <div class="col-12 col-lg-6">
+            <label for="created-time" class="form-label">Sent Time</label>
+            <input type="text" class="form-control" readonly th:value="${feed.updatedTimeOnForm}" id="created-time">
+        </div>
+        <div class="col-12 col-lg-6">
+            <label for="enabled" class="form-label">Status</label>
+            <input type="text" class="form-control" readonly th:value="${feed.feedBackStatus}" id="enabled">
+        </div>
+        <div class="col-12">
+            <label for="comment" class="form-label">Feedback</label>
+            <div th:text="${feed.message}" class="border p-2 m-2" id="comment"></div>
+        </div>
+    </div>
+</div>
+<div class="modal-footer">
+    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+</div>

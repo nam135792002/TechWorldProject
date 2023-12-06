@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<body>
+    <div th:fragment="content" th:remove="tag">
+        <form th:action="@{/settings/save_payment}" method="post">
+            <div class="form-group row m-4">
+                <label class="col-sm-2 col-form-label">VNPay Url Test: </label>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" name="VNPay_URL_TEST" th:value="${VNPay_URL_TEST}" required/>
+                </div>
+            </div>
+
+            <div class="form-group row m-4">
+                <label class="col-sm-2 col-form-label">VNPay Terminal ID: </label>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" name="VNPay_TERMINAL_ID" th:value="${VNPay_TERMINAL_ID}" required/>
+                </div>
+            </div>
+
+            <div class="form-group row m-4">
+                <label class="col-sm-2 col-form-label">VNPay Secret Key: </label>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" name="VNPay_SECRET_KEY" th:value="${VNPay_SECRET_KEY}" required/>
+                </div>
+            </div>
+
+            <div class="text-center">
+                <input type="submit" value="Save" class="btn btn-primary m-3" />
+            </div>
+        </form>
+    </div>
+</body>
+</html>

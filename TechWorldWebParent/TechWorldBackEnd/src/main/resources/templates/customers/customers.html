@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments::page_head('Customers - TechWorld Admin','none')"></head>
+<body>
+<div class="wrapper">
+  <!--sidebar wrapper -->
+  <div th:replace="navigation::sidebar_menu"></div>
+  <!--end sidebar wrapper -->
+  <!--start header -->
+  <header th:replace="navigation::header_menu"></header>
+  <!--end header -->
+  <div class="page-wrapper">
+    <div class="page-content">
+      <div class="page-breadcrumb d-none d-sm-flex align-items-center mb-3">
+        <div class="breadcrumb-title pe-3">Manage Customer</div>
+      </div>
+
+      <div class="card">
+        <div class="card-body">
+          <div class="d-lg-flex align-items-center mb-4 gap-3">
+            <div class="col">
+              <div class="dropdown">
+                <button class="btn btn-warning dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                  <i class="bx bx-cloud-download mr-1"></i>Downloads
+                </button>
+                <ul class="dropdown-menu" style="">
+                  <li><a class="dropdown-item" th:href="@{/customers/export/csv}">Export to CSV</a>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+
+          <div class="table-responsive">
+            <table class="table mb-0" id="example">
+              <thead class="table-light">
+              <tr>
+                <th>ID#</th>
+                <th>Full Name</th>
+                <th>Email</th>
+                <th>Phone Number</th>
+                <th>Enabled</th>
+                <th>Action</th>
+              </tr>
+              </thead>
+              <tbody>
+              <tr th:each="customer : ${listCustomers}">
+                <td>[[${customer.id}]]</td>
+                <td>[[${customer.fullName}]]</td>
+                <td>[[${customer.email}]]</td>
+                <td>[[${customer.phoneNumber}]]</td>
+                <td>
+                  <div class="form-check form-switch form-check-info">
+                    <input th:customerChecked="${customer.id}" class="form-check-input userSwitch" type="checkbox" role="switch" th:checked="${customer.enabled}"/>
+                  </div>
+                </td>
+                <td>
+                  <div class="d-flex order-actions">
+                    <a th:href="@{'/customers/detail/' + ${customer.id}}" class="link-detail" title="View customer"><i class="bx bx-street-view"></i></a>
+                    <a th:href="@{'/customers/delete/' + ${customer.id}}" th:customerId="${customer.id}" title="Delete this customer" class="ms-3 link-delete"><i class="bx bxs-trash"></i></a>
+                  </div>
+                </td>
+              </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal fade" id="exampleLargeModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+
+      </div>
+    </div>
+  </div>
+
+  <div th:replace="modal_fragments::modal_delete"></div>
+  <footer th:replace="fragments::footer"></footer>
+</div>
+<script th:inline="javascript">
+  var contextPath = /*[[@{/}]]*/ '';
+  $(document).ready(function() {
+    $(".userSwitch").change(function() {
+      var customerId = $(this).attr("customerChecked");
+      var enabled = $(this).is(":checked");
+      var url = contextPath + 'customers/' + customerId + '/enabled/' + enabled;
+      $.ajax({
+        type: 'GET',
+        url: url,
+        success: function(response) {
+          console.log("Success");
+          success_noti(response);
+        },
+        error: function(error) {
+          console.log("Error");
+          error_noti(error);
+        }
+      });
+    });
+
+    if ('[[${message}]]' !== '') {
+      var message = JSON.parse('[[${message}]]');
+      if (message.keyword === 'success') {
+        // Hiển thị thông báo thành công
+        pos5_success_noti(message.content);
+      } else if (message.keyword === 'error') {
+        // Hiển thị thông báo lỗi
+        pos4_error_noti(message.content);
+      }
+    }
+  });
+
+  $(document).on("click", ".link-delete", function (e) {
+    e.preventDefault();
+    var customerId = $(this).attr("customerId");
+    var deleteUrl = $(this).attr("href");
+
+    $('#exampleWarningModal').modal('show');
+    $("#modal-body-content").text("Are you sure you want to delete this customer ID " + customerId);
+
+    $(".btn.btn-dark").on("click", function () {
+      window.location.href = deleteUrl;
+    });
+  });
+
+  $(document).on("click", ".link-detail", function (e) {
+    e.preventDefault();
+    var linkDetailUrl = $(this).attr("href");
+
+    $("#exampleLargeModal").modal("show").find(".modal-content").load(linkDetailUrl);
+  });
+</script>
+<script type="text/javascript" th:src="@{/js/common.js}"></script>
+</body>
+</html>

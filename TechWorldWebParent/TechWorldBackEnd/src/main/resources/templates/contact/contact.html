@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+
+  <head th:replace="fragments::page_head('Feedback - TechWorld Admin','tag')"></head>
+  <link rel="stylesheet" th:href="@{/fontawesome/all.css}" />
+  <link rel="stylesheet" th:href="@{/richtext/richtext.min.css}" />
+  <script th:src="@{/richtext/jquery.richtext.min.js}"></script>
+</head>
+<body>
+<div class="wrapper">
+  <!--sidebar wrapper -->
+  <div th:replace="navigation::sidebar_menu"></div>
+  <!--end sidebar wrapper -->
+  <!--start header -->
+  <header th:replace="navigation::header_menu"></header>
+  <!--end header -->
+  <div class="page-wrapper">
+    <div class="page-content">
+      <div class="page-breadcrumb d-none d-sm-flex align-items-center mb-3">
+        <div class="breadcrumb-title pe-3">Manage Feedback</div>
+      </div>
+
+      <div class="card">
+        <div class="card-body">
+          <div class="table-responsive">
+            <table class="table mb-0" id="example">
+              <thead class="table-light">
+              <tr>
+                <th>ID#</th>
+                <th>Full Name</th>
+                <th>Phone Number</th>
+                <th>Email</th>
+                <th>Sent Time</th>
+                <th>Status</th>
+                <th>Action</th>
+              </tr>
+              </thead>
+              <tbody>
+              <tr th:each="feed : ${listFeeds}">
+                <td>[[${feed.id}]]</td>
+                <td>[[${feed.fullName}]]</td>
+                <td>[[${feed.phoneNumber}]]</td>
+                <td>[[${feed.email}]]</td>
+                <td th:text="${feed.updatedTimeOnForm}"></td>
+                <td>
+                  <div class="d-flex align-items-center text-danger">
+                    <i class='bx bx-radio-circle-marked bx-burst bx-rotate-90 align-middle font-18 me-1'></i>
+                    <span>[[${feed.feedBackStatus}]]</span>
+                  </div>
+                </td>
+                <td>
+                  <div class="d-flex order-actions">
+                    <a href="javascript:;" class="compose-mail-btn" th:email="${feed.email}" th:fId="${feed.id}" title="Write email"><i class='bx bx-send'></i></a>
+                    <a th:href="@{'/contact/detail/' + ${feed.id}}" class="link-detail-feedback ms-3" title="View this feedback"><i class="bx bx-street-view"></i></a>
+                  </div>
+                </td>
+              </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <footer th:replace="fragments::footer"></footer>
+
+  <div class="modal fade" id="exampleLargeModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+
+      </div>
+    </div>
+  </div>
+
+  <div class="compose-mail-popup">
+    <div class="card">
+      <div class="card-header bg-dark text-white py-2 cursor-pointer">
+        <div class="d-flex align-items-center">
+          <div class="compose-mail-title">New Message</div>
+          <div class="compose-mail-close ms-auto">x</div>
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="email-form">
+          <form th:action="@{/contact/send_email}" method="post">
+            <input type="hidden" name="idContact" id="idContact">
+            <div class="mb-3">
+              <input type="text" id="toReceiver" readonly name="receiver" class="form-control" placeholder="To" />
+            </div>
+            <div class="mb-3">
+              <input type="text" class="form-control" name="subject" placeholder="Subject" required />
+            </div>
+            <div class="mb-3">
+              <textarea style="height: 500px" class="form-control" id="message" placeholder="Message" name="message" required rows="10" cols="10"></textarea>
+            </div>
+            <div class="mb-0">
+              <div class="d-flex align-items-center">
+                <div class="">
+                  <div class="btn-group">
+                    <button type="submit" class="btn btn-primary">Send</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+<script th:inline="javascript">
+  $(document).ready(function() {
+    if ('[[${message}]]' !== '') {
+      var message = JSON.parse('[[${message}]]');
+      if (message.keyword === 'success') {
+        // Hiển thị thông báo thành công
+        pos5_success_noti(message.content);
+      } else if (message.keyword === 'error') {
+        // Hiển thị thông báo lỗi
+        pos4_error_noti(message.content);
+      }
+    }
+  });
+
+  $(document).on("click", ".link-detail-feedback", function (e) {
+    e.preventDefault();
+    var linkDetailUrl = $(this).attr("href");
+    $("#exampleLargeModal").modal("show").find(".modal-content").load(linkDetailUrl);
+  });
+
+  $(document).on("click", ".compose-mail-btn", function (e) {
+    email = $(this).attr("email");
+    id = $(this).attr("fId");
+    $("#toReceiver").val(email);
+    $("#idContact").val(id);
+    $(".compose-mail-popup").show()
+  });
+
+  $(document).on("click", ".compose-mail-close", function (e) {
+    $(".compose-mail-popup").hide()
+  });
+
+</script>
+<script type="text/javascript">
+  $(document).ready(function () {
+    $("#message").richText();
+  });
+</script>
+<script type="text/javascript" th:src="@{/js/common.js}"></script>
+</body>
+</html>

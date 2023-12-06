@@ -1,0 +1,103 @@
+<!doctype html>
+<html class="no-js" lang="vi" xmlns:th="http://www.thymeleaf.org">
+<header th:replace="fragments::page_head('Liên hệ', 'none')"></header>
+<body class="sticky-header newsletter-popup-modal">
+<a href="#" class="back-to-top" id="backto-top"><i class="fal fa-arrow-up"></i></a>
+<!-- Start Header -->
+<header class="header axil-header header-style-5">
+    <div id="axil-sticky-placeholder"></div>
+    <div th:replace="fragments::navbar_version_beta"></div>
+    <div th:replace="fragments::advertisement"></div>
+</header>
+<!-- End Header -->
+<main class="main-wrapper">
+    <!-- Start Shop Area  -->
+    <div class="axil-contact-page-area axil-section-gap">
+        <div class="container">
+            <div class="axil-contact-page">
+                <div class="row row--30">
+                    <div class="col-lg-8">
+                        <div class="contact-form">
+                            <h3 class="title mb--10">Feedback từ bạn.</h3>
+                            <form th:action="@{/contact/save}" method="post"  class="axil-contact-form" th:object="${feed}">
+                                <div class="row row--10">
+                                    <div class="col-lg-4">
+                                        <div class="form-group">
+                                            <label for="contact-name">Họ và tên <span>*</span></label>
+                                            <input type="text" name="contact-name" id="contact-name" required th:field="*{fullName}">
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-4">
+                                        <div class="form-group">
+                                            <label for="contact-phone">Số điện thoại <span>*</span></label>
+                                            <input type="text" name="contact-phone" id="contact-phone" required th:field="*{phoneNumber}">
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-4">
+                                        <div class="form-group">
+                                            <label for="contact-email">E-mail <span>*</span></label>
+                                            <input type="email" name="contact-email" id="contact-email" required th:field="*{email}">
+                                        </div>
+                                    </div>
+                                    <div class="col-12">
+                                        <div class="form-group">
+                                            <label for="contact-message">Lời nhắn </label>
+                                            <textarea name="contact-message" id="contact-message" cols="1" rows="2" required th:field="*{message}"></textarea>
+                                        </div>
+                                    </div>
+                                    <div class="col-12">
+                                        <div class="form-group mb--0">
+                                            <input type="submit" value="Gửi Feed Back">
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                    <div class="col-lg-4">
+                        <div class="contact-location mb--40">
+                            <h4 class="title mb--20">Cửa hàng của chúng tôi</h4>
+                            <span class="address mb--20">số 02, Võ Oanh, phường 25, quận Bình Thạnh, TP.Hồ Chí Minh, Việt Nam</span>
+                            <span class="phone">Phone: 1800.2097</span>
+                            <span class="email">Email: techworld.2023@gmail.com</span>
+                        </div>
+                        <div class="contact-career mb--40">
+                            <h4 class="title mb--20">Kinh doanh </h4>
+                            <p>Các loại sản phẩm công nghệ chính hãng</p>
+                        </div>
+                        <div class="opening-hour">
+                            <h4 class="title mb--20">Thời gian hoạt động:</h4>
+                            <p>Thứ 2 to Thứ 7: 9am - 10pm
+                                <br> Chủ nhật: 10am - 6pm
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Start Google Map Area  -->
+            <div class="axil-google-map-wrap axil-section-gap pb--0">
+                <div class="mapouter">
+                    <div class="gmap_canvas">
+                        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d1165.1512625339105!2d106.71648919520644!3d10.804719046106769!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3175293dceb22197%3A0x755bb0f39a48d4a6!2zVHLGsOG7nW5nIMSQ4bqhaSBI4buNYyBHaWFvIFRow7RuZyBW4bqtbiBU4bqjaSBUaMOgbmggUGjhu5EgSOG7kyBDaMOtIE1pbmggLSBDxqEgc-G7nyAx!5e0!3m2!1svi!2s!4v1701749590932!5m2!1svi!2s" width="1080" height="500" id="gmap_canvas" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+                    </div>
+                </div>
+            </div>
+            <!-- End Google Map Area  -->
+        </div>
+    </div>
+    <!-- End Shop Area  -->
+</main>
+<footer th:replace="fragments::footer"></footer>
+<!-- End Footer Area  -->
+<div th:replace="fragments::js"></div>
+<script th:inline="javascript">
+    $(document).ready(function() {
+        if ([[${message}]] !== null) {
+            var message = JSON.parse('[[${message}]]');
+            pos5_success_noti(message);
+
+        }
+    });
+</script>
+</body>
+</html>

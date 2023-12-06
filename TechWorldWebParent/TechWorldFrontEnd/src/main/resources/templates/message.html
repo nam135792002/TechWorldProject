@@ -1,0 +1,34 @@
+<!doctype html>
+<html class="no-js" lang="vi" xmlns:th="http://www.thymeleaf.org">
+<header th:replace="fragments::page_head(${pageTitle}, 'none')"></header>
+<body class="sticky-header newsletter-popup-modal">
+<a href="#" class="back-to-top" id="backto-top"><i class="fal fa-arrow-up"></i></a>
+<!-- Start Header -->
+<header class="header axil-header header-style-5">
+    <div id="axil-sticky-placeholder"></div>
+    <div th:replace="fragments::navbar_version_beta"></div>
+    <div th:replace="fragments::advertisement"></div>
+</header>
+<!-- End Header -->
+<main class="main-wrapper">
+    <!-- Start Shop Area  -->
+    <div class="axil-shop-area axil-section-gap bg-color-white">
+        <div class="container">
+            <div class="row row--15 text-center">
+                <div th:if="${title != null}">
+                    <h3>[[${title}]]</h3>
+                </div>
+                <div th:if="${message != null}">
+                    <h3>[[${message}]]</h3>
+                </div>
+            </div>
+        </div>
+        <!-- End .container -->
+    </div>
+    <!-- End Shop Area  -->
+</main>
+<footer th:replace="fragments::footer"></footer>
+<!-- End Footer Area  -->
+<div th:replace="fragments::js"></div>
+</body>
+</html>

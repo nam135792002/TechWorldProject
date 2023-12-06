@@ -1,0 +1,40 @@
+<div class="modal-header">
+    <h5 class="modal-title">Review Details</h5>
+    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+</div>
+<div class="modal-body">
+    <div class="row g-3">
+        <div class="col-12 col-lg-6">
+            <label for="id" class="form-label">Review ID:</label>
+            <input type="text" class="form-control" readonly th:value="${review.id}" id="id" />
+        </div>
+        <div class="col-12 col-lg-6">
+            <label for="name" class="form-label">Product</label>
+            <input type="text" class="form-control" readonly th:value="${review.product.shortName}" id="name" />
+        </div>
+        <div class="col-12 col-lg-6">
+            <label for="email" class="form-label">Customer</label>
+            <input type="text" class="form-control" readonly th:value="${review.customer.fullName}" id="email"/>
+        </div>
+
+        <div class="col-12 col-lg-6">
+            <label for="phone-number" class="form-label">Headline</label>
+            <input type="text" class="form-control" readonly th:value="${review.headline}" id="phone-number"/>
+        </div>
+        <div class="col-12 col-lg-6">
+            <label for="created-time" class="form-label">Rating</label>
+            <input type="text" class="form-control" readonly th:value="${review.rating}" id="created-time">
+        </div>
+        <div class="col-12 col-lg-6">
+            <label for="enabled" class="form-label">Review Time</label>
+            <input type="text" class="form-control" readonly th:value="${review.updatedTimeOnForm}" id="enabled">
+        </div>
+        <div class="col-12">
+            <label for="comment" class="form-label">Comment</label>
+            <input type="text" class="form-control" readonly th:value="${review.comment}" id="comment">
+        </div>
+    </div>
+</div>
+<div class="modal-footer">
+    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+</div>

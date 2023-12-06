@@ -1,0 +1,164 @@
+<div class="modal-header">
+    <h5 class="modal-title">Order Detail</h5>
+    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+</div>
+<div class="modal-body">
+    <div class="card">
+        <div class="card-body">
+            <ul class="nav nav-pills mb-3" role="tablist">
+                <li class="nav-item" role="presentation">
+                    <a class="nav-link active" data-bs-toggle="pill" href="#primary-pills-home" role="tab" aria-selected="true">
+                        <div class="d-flex align-items-center">
+                            <div class="tab-icon"><i class='fas fa-hotel' style="font-size: 20px"></i>
+                            </div>
+                            <div class="tab-title ms-2">Overview</div>
+                        </div>
+                    </a>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <a class="nav-link" data-bs-toggle="pill" href="#primary-pills-profile" role="tab" aria-selected="false">
+                        <div class="d-flex align-items-center">
+                            <div class="tab-icon"><i class='fas fa-prescription' style="font-size: 20px"></i>
+                            </div>
+                            <div class="tab-title ms-2">Product</div>
+                        </div>
+                    </a>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <a class="nav-link" data-bs-toggle="pill" href="#primary-pills-contact" role="tab" aria-selected="false">
+                        <div class="d-flex align-items-center">
+                            <div class="tab-icon"><i class='fas fa-receipt' style="font-size: 20px"></i>
+                            </div>
+                            <div class="tab-title ms-2">Receiver</div>
+                        </div>
+                    </a>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <a class="nav-link" data-bs-toggle="pill" href="#primary-pills-detail" role="tab" aria-selected="false">
+                        <div class="d-flex align-items-center">
+                            <div class="tab-icon"><i class='fas fa-star-christmas' style="font-size: 20px"></i>
+                            </div>
+                            <div class="tab-title ms-2">Status</div>
+                        </div>
+                    </a>
+                </li>
+            </ul>
+            <div class="tab-content" id="pills-tabContent">
+                <div class="tab-pane fade show active" id="primary-pills-home" role="tabpanel">
+                    <div class="row g-3">
+                        <div class="col-12 col-lg-6">
+                            <label for="id" class="form-label">Order ID</label>
+                            <input type="text" class="form-control" readonly th:value="${order.id}" id="id" />
+                        </div>
+                        <div class="col-12 col-lg-6">
+                            <label for="fullName" class="form-label">Full Name</label>
+                            <input type="text" class="form-control" readonly th:value="${order.customer.fullName}" id="fullName" />
+                        </div>
+
+                        <div class="col-12 col-lg-6">
+                            <label for="total" class="form-label">Total</label>
+                            <input type="text" class="form-control" readonly th:value="${#numbers.formatDecimal(order.total, 0, 'COMMA', 0, 'POINT')} + 'đ'" id="total" />
+                        </div>
+
+                        <div class="col-12 col-lg-6">
+                            <label for="payment" class="form-label">Payment Method</label>
+                            <input type="text" class="form-control" readonly th:value="${order.paymentMethod}" id="payment" />
+                        </div>
+                        <div class="col-12 col-lg-6">
+                            <label for="status" class="form-label">Status</label>
+                            <input type="text" class="form-control" readonly th:value="${order.status}" id="status" />
+                        </div>
+                        <div class="col-12 col-lg-6">
+                            <label for="orderTime" class="form-label">Order Time</label>
+                            <input type="text" class="form-control" readonly th:value="${order.updatedTimeOnForm}" id="orderTime" />
+                        </div>
+                    </div><!---end row-->
+                </div>
+                <div class="tab-pane fade" id="primary-pills-profile" role="tabpanel">
+                    <th:block th:each="detail,status : ${order.orderDetails}">
+                        <div class="row" th:with="product = ${detail.product}">
+                            <div class="col-sm-1">
+                                <div class="div-count">[[${status.count}]]</div>
+                            </div>
+                            <div class="col-sm-3"><img th:src="@{${product.mainImage}}" class="img-fluid"/></div>
+                            <div class="col-sm-8">
+                                <div class="text-wrap">
+                                    <b>[[${product.name}]]</b>
+                                </div>
+                                <div class="d-inline-block">
+                                    <span>
+                                        Subtotal: [[${detail.quantity}]] x <span th:text="${#numbers.formatDecimal(product.newPrice, 0, 'COMMA', 0, 'POINT')} + 'đ'"></span> =
+                                        <span th:text="${#numbers.formatDecimal(detail.subtotal, 0, 'COMMA', 0, 'POINT')} + 'đ'"></span>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        <hr>
+                    </th:block>
+                </div>
+                <div class="tab-pane fade" id="primary-pills-contact" role="tabpanel">
+                    <div class="row g-3">
+                        <div class="col-12 col-lg-6">
+                            <label for="full-name" class="form-label">Full Name</label>
+                            <input type="text" class="form-control" readonly th:value="${order.fullName}" id="full-name" />
+                        </div>
+                        <div class="col-12 col-lg-6">
+                            <label for="email" class="form-label">Email</label>
+                            <input type="text" class="form-control" readonly th:value="${order.email}" id="email" />
+                        </div>
+
+                        <div class="col-12 col-lg-6">
+                            <label for="phoneNumber" class="form-label">Phone Number</label>
+                            <input type="text" class="form-control" readonly th:value="${order.phoneNumber}" id="phoneNumber" />
+                        </div>
+
+                        <div class="col-12 col-lg-6">
+                            <label for="addressLine" class="form-label">Address Line</label>
+                            <input type="text" class="form-control" readonly th:value="${order.addressLine}" id="addressLine" />
+                        </div>
+                        <div class="col-12 col-lg-6">
+                            <label for="ward" class="form-label">Ward</label>
+                            <input type="text" class="form-control" readonly th:value="${order.ward}" id="ward" />
+                        </div>
+                        <div class="col-12 col-lg-6">
+                            <label for="district" class="form-label">District</label>
+                            <input type="text" class="form-control" readonly th:value="${order.district}" id="district" />
+                        </div>
+                        <div class="col-12 col-lg-6">
+                            <label for="province" class="form-label">Province</label>
+                            <input type="text" class="form-control" readonly th:value="${order.province}" id="province" />
+                        </div>
+                        <div class="col-12 col-lg-6">
+                            <label for="country" class="form-label">Country</label>
+                            <input type="text" class="form-control" readonly value="Viet Nam" id="country" />
+                        </div>
+                    </div><!---end row-->
+                </div>
+                <div class="tab-pane fade" id="primary-pills-detail" role="tabpanel">
+                    <div class="full-details">
+                        <table class="table table-striped table-bordered table-hover table-responsive-sm">
+                            <thead class="thead-dark">
+                            <tr>
+                                <th>Time</th>
+                                <th>Status</th>
+                                <th>Notes</th>
+                            </tr>
+                            </thead>
+
+                            <tbody>
+                            <tr th:each="track : ${order.orderTracks}">
+                                <td>[[${track.updatedTime}]]</td>
+                                <td>[[${track.status}]]</td>
+                                <td><i>[[${track.notes}]]</i></td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal-footer">
+    <button type="button" class="btn btn-success" data-bs-dismiss="modal" style="font-size: 20px">Close</button>
+</div>

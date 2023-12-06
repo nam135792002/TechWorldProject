@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<body>
+  <div th:fragment="content" th:remove="tag">
+    <div class="row g-3">
+      <div class="col-12 col-lg-6">
+        <label for="name" class="form-label">Product Name</label>
+        <input type="text" class="form-control" readonly th:value="${product.name}" id="name"/>
+      </div>
+      <div class="col-12 col-lg-6">
+        <label for="brand" class="form-label">Brand</label>
+        <input type="text" class="form-control" readonly th:value="${product.brand.name}" id="brand"/>
+      </div>
+
+      <div class="col-12 col-lg-6">
+        <label class="form-label">Category</label>
+        <input type="text" class="form-control" readonly th:value="${product.category.name}" id="category"/>
+      </div>
+      <div class="col-12 col-lg-6">
+        <label for="discountPercent" class="form-label">Discount</label>
+        <input type="number" class="form-control" readonly th:value="${product.discountPercent}" id="discountPercent">
+      </div>
+      <div class="col-12 col-lg-6">
+        <label for="enabled" class="form-label">Enabled</label>
+        <div class="form-check form-switch form-check-success">
+          <input class="form-check-input" name="enable" type="checkbox" readonly role="switch" id="enabled" onclick="return false;" th:checked="${product.enabled}">
+        </div>
+      </div>
+      <div class="col-12 col-lg-6">
+        <label for="inStock" class="form-label">In-stock</label>
+        <div class="form-check form-switch form-check-success">
+          <input class="form-check-input" name="inStock" type="checkbox" readonly  role="switch" id="inStock" onclick="return false;" th:checked="${product.inStock}">
+        </div>
+      </div>
+      <div class="col-12 col-lg-6">
+        <label for="oldPrice" class="form-label">Old Price</label>
+        <input class="form-control" name="oldPrice" th:value="${#numbers.formatDecimal(product.oldPrice, 0, 'COMMA', 0, 'POINT')} + 'đ'" type="text" id="oldPrice" readonly>
+      </div>
+      <div class="col-12 col-lg-6">
+        <label for="newPrice" class="form-label">New Price</label>
+        <input type="text" class="form-control" th:value="${#numbers.formatDecimal(product.newPrice, 0, 'COMMA', 0, 'POINT')} + 'đ'" id="newPrice" name="newPrice" readonly>
+      </div>
+      <div class="col-12 col-lg-6">
+        <label for="oldPrice" class="form-label">Created Time</label>
+        <input class="form-control" name="oldPrice" th:value="${product.createdTime}" type="text"  readonly>
+      </div>
+      <div class="col-12 col-lg-6">
+        <label for="newPrice" class="form-label">Updated Time</label>
+        <input type="text" class="form-control" th:value="${product.updatedTime}" name="newPrice" readonly>
+      </div>
+    </div><!---end row-->
+  </div>
+</body>
+</html>

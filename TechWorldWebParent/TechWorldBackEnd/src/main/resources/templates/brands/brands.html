@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments::page_head('Brand - TechWorld Admin','none')"></head>
+<body>
+<div class="wrapper">
+    <!--sidebar wrapper -->
+    <div th:replace="navigation::sidebar_menu"></div>
+    <!--end sidebar wrapper -->
+    <!--start header -->
+    <header th:replace="navigation::header_menu"></header>
+    <!--end header -->
+    <div class="page-wrapper">
+        <div class="page-content">
+            <div class="page-breadcrumb d-none d-sm-flex align-items-center mb-3">
+                <div class="breadcrumb-title pe-3">Manage Brand</div>
+            </div>
+
+            <div class="card">
+                <div class="card-body">
+                    <div class="d-lg-flex align-items-center mb-4 gap-3">
+                        <div class="col">
+                            <div class="dropdown">
+                                <button class="btn btn-warning dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                    <i class="bx bx-cloud-download mr-1"></i>Downloads
+                                </button>
+                                <ul class="dropdown-menu" style="">
+                                    <li><a class="dropdown-item" th:href="@{/brands/export/csv}">Export to CSV</a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <div class="ms-auto">
+                            <a th:href="@{/brands/new}" class="btn btn-primary radius-20 mt-2 mt-lg-0">
+                                <i class="bx bxs-plus-square"></i>
+                                Add New Brand
+                            </a>
+                        </div>
+                    </div>
+
+                    <div class="table-responsive">
+                        <table class="table mb-0" id="example">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>ID#</th>
+                                    <th>Logo</th>
+                                    <th>Name</th>
+                                    <th>Categories</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr th:each="brand : ${listBrands}">
+                                    <td>[[${brand.id}]]</td>
+                                    <td>
+                                        <img th:if="${brand.logo == null}" th:src="@{/images/brand_icon.png}" class="rounded-circle" width="60" height="60" alt="brand avatar" />
+                                        <img th:if="${brand.logo != null}" th:src="${brand.logo}" style="width: 50px; height: 30px" alt="brand avatar">
+                                    </td>
+                                    <td>[[${brand.name}]]</td>
+                                    <td>
+                                        <th:block th:each="cat : ${brand.categories}">
+                                            <div class="chip chip-md">[[${cat.name}]]</div>
+                                        </th:block>
+                                    </td>
+                                    <td>
+                                        <div class="d-flex order-actions">
+                                            <a th:href="@{'/brands/edit/'+${brand.id}}" class="" title="Edit this brand"><i class="bx bxs-edit"></i></a>
+                                            <a th:href="@{'/brands/delete/' + ${brand.id}}" th:brandId="${brand.id}" title="Delete this brand" class="ms-3 link-delete"><i class="bx bxs-trash"></i></a>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div th:replace="modal_fragments::modal_delete"></div>
+    <footer th:replace="fragments::footer"></footer>
+</div>
+<script th:inline="javascript">
+    $(document).ready(function() {
+        if ('[[${message}]]' !== '') {
+            var message = JSON.parse('[[${message}]]');
+            if (message.keyword === 'success') {
+                // Hiển thị thông báo thành công
+                pos5_success_noti(message.content);
+            } else if (message.keyword === 'error') {
+                // Hiển thị thông báo lỗi
+                pos4_error_noti(message.content);
+            }
+        }
+    });
+
+    $(document).on("click", ".link-delete", function (e) {
+        e.preventDefault();
+        var brandId = $(this).attr("brandId");
+        var deleteUrl = $(this).attr("href");
+
+        $('#exampleWarningModal').modal('show');
+        $("#modal-body-content").text("Are you sure you want to delete this brand ID " + brandId);
+
+        $(".btn.btn-dark").on("click", function () {
+            window.location.href = deleteUrl;
+        });
+    });
+</script>
+<script type="text/javascript" th:src="@{/js/common.js}"></script>
+</body>
+</html>

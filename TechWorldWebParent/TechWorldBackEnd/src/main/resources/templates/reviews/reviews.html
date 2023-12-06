@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+
+    <head th:replace="fragments::page_head('Review - TechWorld Admin','none')"></head>
+    <link rel="stylesheet" th:href="@{/fontawesome/all.css}" />
+</head>
+<body>
+<div class="wrapper">
+    <!--sidebar wrapper -->
+    <div th:replace="navigation::sidebar_menu"></div>
+    <!--end sidebar wrapper -->
+    <!--start header -->
+    <header th:replace="navigation::header_menu"></header>
+    <!--end header -->
+    <div class="page-wrapper">
+        <div class="page-content">
+            <div class="page-breadcrumb d-none d-sm-flex align-items-center mb-3">
+                <div class="breadcrumb-title pe-3">Manage Reviews</div>
+            </div>
+
+            <div class="card">
+                <div class="card-body">
+                    <div class="d-lg-flex align-items-center mb-4 gap-3">
+                        <div class="col">
+                            <div class="dropdown">
+                                <button class="btn btn-warning dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                    <i class="bx bx-cloud-download mr-1"></i>Downloads
+                                </button>
+                                <ul class="dropdown-menu" style="">
+                                    <li><a class="dropdown-item" th:href="@{/reviews/export/csv}">Export to CSV</a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="table-responsive">
+                        <table class="table mb-0" id="example">
+                            <thead class="table-light">
+                            <tr>
+                                <th>ID#</th>
+                                <th>Product</th>
+                                <th>Customer</th>
+                                <th>Rating</th>
+                                <th>Review Time</th>
+                                <th>Action</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr th:each="review : ${listReviews}">
+                                <td>[[${review.id}]]</td>
+                                <td>
+                                    <a th:href="@{'/products/detail/'+${review.product.id}}" class="link-detail-product">
+                                        [[${review.product.shortName}]]
+                                    </a>
+                                </td>
+                                <td>
+                                    <a th:href="@{'/customers/detail/'+${review.customer.id}}" class="link-detail-customer">
+                                        [[${review.customer.fullName}]]
+                                    </a>
+                                </td>
+                                <td>[[${review.rating}]] <i class='fas fa-star fa-2x' style="color: yellow"></i></td>
+                                <td>[[${review.reviewTime}]]</td>
+                                <td>
+                                    <div class="d-flex order-actions">
+                                        <a th:href="@{'/reviews/detail/' + ${review.id}}" class="link-detail-review" title="View this review"><i class="bx bx-street-view"></i></a>
+                                        <a th:href="@{'/reviews/edit/'+${review.id}}" class="ms-3" title="Edit this review"><i class="bx bxs-edit"></i></a>
+                                        <a th:href="@{'/reviews/delete/' + ${review.id}}" th:reviewId="${review.id}" title="Delete this review" class="ms-3 link-delete"><i class="bx bxs-trash"></i></a>
+                                    </div>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="exampleLargeModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="exampleLargeModal01" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-xl">
+            <div class="modal-content">
+
+            </div>
+        </div>
+    </div>
+
+    <div th:replace="modal_fragments::modal_delete"></div>
+    <footer th:replace="fragments::footer"></footer>
+</div>
+<script th:inline="javascript">
+    $(document).ready(function() {
+        if ('[[${message}]]' !== '') {
+            var message = JSON.parse('[[${message}]]');
+            if (message.keyword === 'success') {
+                // Hiển thị thông báo thành công
+                pos5_success_noti(message.content);
+            } else if (message.keyword === 'error') {
+                // Hiển thị thông báo lỗi
+                pos4_error_noti(message.content);
+            }
+        }
+    });
+
+    $(document).on("click", ".link-delete", function (e) {
+        e.preventDefault();
+        var reviewId = $(this).attr("reviewId");
+        var deleteUrl = $(this).attr("href");
+
+        $('#exampleWarningModal').modal('show');
+        $("#modal-body-content").text("Are you sure you want to delete this review ID " + reviewId);
+
+        $(".btn.btn-dark").on("click", function () {
+            window.location.href = deleteUrl;
+        });
+    });
+</script>
+
+<script type="text/javascript">
+    modelURL = "[[@{/reviews}]]";
+
+    $(document).ready(function (){
+        handleProductDetailLink();
+        handleCustomerDetailLink();
+        handleReviewDetailLink();
+    });
+
+    function handleDetailLinkClick(cssClass, modalId){
+        $(cssClass).on("click",function (e){
+            e.preventDefault();
+            linkDetailURL = $(this).attr("href");
+            $(modalId).modal("show").find(".modal-content").load(linkDetailURL);
+        });
+    }
+
+    function handleProductDetailLink(){
+        handleDetailLinkClick(".link-detail-product","#exampleLargeModal01");
+    }
+
+    function handleCustomerDetailLink(){
+        handleDetailLinkClick(".link-detail-customer","#exampleLargeModal");
+    }
+
+    function handleReviewDetailLink(){
+        handleDetailLinkClick(".link-detail-review","#exampleLargeModal");
+    }
+</script>
+<script type="text/javascript" th:src="@{/js/common.js}"></script>
+</body>
+</html>

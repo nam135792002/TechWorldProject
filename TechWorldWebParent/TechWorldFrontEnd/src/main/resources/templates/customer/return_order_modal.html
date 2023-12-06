@@ -1,0 +1,61 @@
+<!doctype html>
+<html class="no-js" lang="vi" xmlns:th="http://www.thymeleaf.org">
+<body class="sticky-header newsletter-popup-modal">
+<div th:fragment="content" class="modal fade" id="returnOrderModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title" id="returnOrderModalTitle">Trả Đơn Hàng</h4>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+
+      <form onsubmit="return submitReturnForm();">
+        <div class="modal-body">
+          <div id="divReason">
+            <div>Lý do:</div>
+            <div class="order-payment-method">
+              <div class="single-payment mb--10">
+                <div class="input-group">
+                  <input type="radio" id="radio5" name="returnReason" value="I received the wrong items">
+                  <label for="radio5">Lỗi do từ nhà sản xuất</label>
+                </div>
+              </div>
+              <div class="single-payment mb--10">
+                <div class="input-group justify-content-between align-items-center">
+                  <input type="radio" id="radio6" name="returnReason" value="The product was damaged/defective">
+                  <label for="radio6">Lỗi do quá trình vận chuyển</label>
+                </div>
+              </div>
+              <div class="single-payment mb--10">
+                <div class="input-group justify-content-between align-items-center">
+                  <input type="radio" id="radio7" name="returnReason" value="The product was damaged/defective">
+                  <label for="radio7">Giao nhầm sảm phẩm</label>
+                </div>
+              </div>
+              <div class="single-payment mb--10">
+                <div class="input-group justify-content-between align-items-center">
+                  <input type="radio" id="radio8" name="returnReason" value="The product was damaged/defective">
+                  <label for="radio8">Giao hàng quá trễ</label>
+                </div>
+              </div>
+            </div>
+
+            <div class="m-1">
+              <textarea class="form-control" id="returnNote" rows="4" maxlength="120" placeholder="Bạn có thể cung cấp thêm thông tin" style="font-size: 17px"></textarea>
+            </div>
+          </div>
+
+          <div id="divMessage" class="text-center"></div>
+        </div>
+
+        <div class="modal-footer">
+          <button type="submit" class="btn btn-success" id="firstButton" style="font-size: 20px">Gửi Yêu Cầu</button>
+          <button type="button" class="btn btn-danger" id="secondButton" data-bs-dismiss="modal" style="font-size: 20px">Hủy</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+</div>
+</body>
+</html>

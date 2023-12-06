@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments::page_head('Home - TechWorld Admin','none')"></head>
+<body>
+<div class="wrapper">
+    <!--sidebar wrapper -->
+    <div th:replace="navigation::sidebar_menu"></div>
+    <!--end sidebar wrapper -->
+    <!--start header -->
+    <header th:replace="navigation::header_menu"></header>
+    <!--end header -->
+    <div class="page-wrapper">
+        <div class="page-content">
+            <div class="row row-cols-1 row-cols-md-2 row-cols-xl-4">
+                <div class="col">
+                    <div class="card radius-10 bg-primary bg-gradient">
+                        <div class="card-body">
+                            <div class="d-flex align-items-center">
+                                <div>
+                                    <p class="mb-0 text-white">Total Orders</p>
+                                    <h4 class="my-1 text-white" th:text="${orderCount}"></h4>
+                                </div>
+                                <div class="text-white ms-auto font-35"><i class="bx bx-cart-alt"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="card radius-10 bg-danger bg-gradient">
+                        <div class="card-body">
+                            <div class="d-flex align-items-center">
+                                <div>
+                                    <p class="mb-0 text-white">Total Income</p>
+                                    <h4 class="my-1 text-white" th:text="${#numbers.formatDecimal(sumIncome, 0, 'COMMA', 0, 'POINT')} + 'đ'"></h4>
+                                </div>
+                                <div class="text-white ms-auto font-35"><i class="bx bx-dollar"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="card radius-10 bg-warning bg-gradient">
+                        <div class="card-body">
+                            <div class="d-flex align-items-center">
+                                <div>
+                                    <p class="mb-0 text-dark">Total Users</p>
+                                    <h4 class="text-dark my-1" th:text="${countUser}"></h4>
+                                </div>
+                                <div class="text-dark ms-auto font-35"><i class="bx bx-user-pin"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="card radius-10 bg-success bg-gradient">
+                        <div class="card-body">
+                            <div class="d-flex align-items-center">
+                                <div>
+                                    <p class="mb-0 text-white">Total Reviews</p>
+                                    <h4 class="my-1 text-white" th:text="${countReview}"></h4>
+                                </div>
+                                <div class="text-white ms-auto font-35"><i class="bx bx-comment-detail"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="card radius-10 bg-success">
+                        <div class="card-body">
+                            <div class="d-flex align-items-center">
+                                <div>
+                                    <p class="mb-0 text-white">Brand</p>
+                                    <h4 class="my-1 text-white" th:text="${countBrand}"></h4>
+                                </div>
+                                <div class="widgets-icons bg-white text-success ms-auto"><i class="bx bx-git-branch"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="card radius-10 bg-info">
+                        <div class="card-body">
+                            <div class="d-flex align-items-center">
+                                <div>
+                                    <p class="mb-0 text-dark">Total Customers</p>
+                                    <h4 class="my-1 text-dark" th:text="${countCustomer}"></h4>
+                                </div>
+                                <div class="widgets-icons bg-white text-dark ms-auto"><i class="bx bxs-group"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="card radius-10 bg-danger">
+                        <div class="card-body">
+                            <div class="d-flex align-items-center">
+                                <div>
+                                    <p class="mb-0 text-white">Total Categories</p>
+                                    <h4 class="my-1 text-white" th:text="${countCategory}"></h4>
+                                </div>
+                                <div class="widgets-icons bg-white text-danger ms-auto"><i class="bx bx-category"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="card radius-10 bg-warning">
+                        <div class="card-body">
+                            <div class="d-flex align-items-center">
+                                <div>
+                                    <p class="mb-0 text-dark">Total Product</p>
+                                    <h4 class="my-1 text-dark" th:text="${countProduct}"></h4>
+                                </div>
+                                <div class="widgets-icons bg-white text-dark ms-auto"><i class="bx bx-diamond"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-12 col-xl-6 d-flex">
+                    <div class="card radius-10 w-100">
+                        <div class="card-header">
+                            <div class="d-flex align-items-center">
+                                <div>
+                                    <h5 class="mb-0">New Customers</h5>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="customers-list p-3 mb-3">
+                            <th:block th:each="customer : ${listCustomers}">
+                                <div class="customers-list-item d-flex align-items-center border-bottom p-2 cursor-pointer">
+                                    <div class="">
+                                        <img th:src="@{/images/personal.png}" class="rounded-circle" width="46" height="46" alt="" />
+                                    </div>
+                                    <div class="ms-2">
+                                        <h6 class="mb-1 font-14" th:text="${customer.fullName}"></h6>
+                                        <p class="mb-0 font-13 text-secondary" th:text="${customer.email}"></p>
+                                    </div>
+                                    <div class="ms-auto">
+                                        <a href="javascript:;">Date: [[${customer.updatedTimeOnForm}]]</a>
+                                    </div>
+                                </div>
+                            </th:block>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-12 col-xl-6 d-flex">
+                    <div class="card radius-10 w-100">
+                        <div class="card-header">
+                            <div class="d-flex align-items-center">
+                                <div>
+                                    <h5 class="mb-0">Orders Summary</h5>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div class="row m-0 row-cols-1 row-cols-md-3">
+                                <div class="col border-end">
+                                    <div id="chart16"></div>
+                                </div>
+                                <div class="col border-end">
+                                    <div id="chart17"></div>
+                                </div>
+                                <div class="col">
+                                    <div id="chart18"></div>
+                                </div>
+                            </div>
+                            <div>&nbsp;</div>
+                            <div>&nbsp;</div>
+                            <div>&nbsp;</div>
+                            <div class="row m-0 row-cols-1 row-cols-md-3">
+                                <div class="col border-end">
+                                    <div id="chart108"></div>
+                                </div>
+                                <div class="col">
+                                    <div id="chart107"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card radius-10">
+                <div class="card-body">
+                    <div class="d-flex align-items-center">
+                        <div>
+                            <h5 class="mb-0">Recent Orders</h5>
+                        </div>
+                        <div class="font-22 ms-auto"><i class='bx bx-dots-horizontal-rounded'></i>
+                        </div>
+                    </div>
+                    <hr/>
+                    <div class="table-responsive">
+                        <table class="table align-middle mb-0" id="example">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>Order id</th>
+                                    <th>Product</th>
+                                    <th>Customer</th>
+                                    <th>Date</th>
+                                    <th>Total</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <th:block th:each="order : ${listOrder}">
+                                    <tr>
+                                        <td th:text="${order.id}"></td>
+                                        <td>
+                                            <th:block th:each="detail : ${order.orderDetails}">
+                                                <div class="d-flex align-items-center">
+                                                    <div class="recent-product-img">
+                                                        <img th:src="${detail.product.mainImage}" alt="">
+                                                    </div>
+                                                    <div class="ms-2">
+                                                        <h6 class="mb-1 font-14" th:text="${detail.product.shortName}"></h6>
+                                                    </div>
+                                                </div>
+                                            </th:block>
+                                        </td>
+                                        <td th:text="${order.customer.fullName}"></td>
+                                        <td th:text="${order.updatedTimeOnForm}"></td>
+                                        <td th:text="${#numbers.formatDecimal(order.total, 0, 'COMMA', 0, 'POINT')} + 'đ'"></td>
+                                        <td>
+                                            <div class="d-flex align-items-center text-danger">	<i class='bx bx-radio-circle-marked bx-burst bx-rotate-90 align-middle font-18 me-1'></i>
+                                                <span>New</span>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </th:block>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer th:replace="fragments::footer"></footer>
+</div>
+<script th:inline="javascript">
+    /*<![CDATA[*/
+    // Get values from Thymeleaf model
+    var formattedCountOrderByCanceled = /*[[${map['formattedCountOrderByCanceled']}]]*/ 'default_value';
+    var formattedCountOrderByCompleted = /*[[${map['formattedCountOrderByCompleted']}]]*/ 'default_value';
+    var formattedCountOrderByInProgress = /*[[${map['formattedCountOrderByInProgress']}]]*/ 'default_value';
+
+    var countCanceled = parseFloat(formattedCountOrderByCanceled.replace(',', '.')).toFixed(2);
+    var countCompleted = parseFloat(formattedCountOrderByCompleted.replace(',', '.')).toFixed(2);
+    var countProgress = parseFloat(formattedCountOrderByInProgress.replace(',', '.')).toFixed(2);
+
+    var formattedCountOrderByCOD = /*[[${map01['formattedCountOrderByCOD']}]]*/ 'default_value';
+    var formattedCountOrderByVnPay = /*[[${map01['formattedCountOrderByVnPay']}]]*/ 'default_value';
+
+    var countCOD = parseFloat(formattedCountOrderByCOD.replace(',', '.')).toFixed(2);
+    var countVnPay = parseFloat(formattedCountOrderByVnPay.replace(',', '.')).toFixed(2);
+    /*]]>*/
+</script>
+<script type="text/javascript" th:src="@{/js/common.js}"></script>
+</body>
+</html>

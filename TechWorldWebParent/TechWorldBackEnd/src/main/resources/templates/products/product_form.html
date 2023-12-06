@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+
+    <head th:replace="fragments::page_head(${pageTitle},'tag')"></head>
+    <link rel="stylesheet" th:href="@{/fontawesome/all.css}" />
+    <link rel="stylesheet" th:href="@{/richtext/richtext.min.css}" />
+    <script th:src="@{/richtext/jquery.richtext.min.js}"></script>
+</head>
+<body>
+<div class="wrapper">
+    <!--sidebar wrapper -->
+    <div th:replace="navigation::sidebar_menu"></div>
+    <!--end sidebar wrapper -->
+    <!--start header -->
+    <header th:replace="navigation::header_menu"></header>
+    <!--end header -->
+    <div class="page-wrapper">
+        <div class="page-content">
+            <h6 class="mb-0 text-uppercase">Manage Products | [[${pageTitle}]]</h6>
+            <hr/>
+            <form th:action="@{/products/save}" method="post"  th:object="${product}" enctype="multipart/form-data" onsubmit="return checkUnique(this)">
+                <input type="hidden" th:field="*{id}"/>
+                <input th:if="${product.category != null}" type="hidden" id="categoryId" th:value="${product.category.id}" />
+<!--                <input type="hidden" th:field="*{createdTime}">-->
+                <div class="card">
+                    <div class="card-body">
+                        <ul class="nav nav-pills mb-3" role="tablist">
+                            <li class="nav-item" role="presentation">
+                                <a class="nav-link active" data-bs-toggle="pill" href="#primary-pills-home" role="tab" aria-selected="true">
+                                    <div class="d-flex align-items-center">
+                                        <div class="tab-icon"><i class='fas fa-circle-info' style="font-size: 20px"></i>
+                                        </div>
+                                        <div class="tab-title ms-2">Overview</div>
+                                    </div>
+                                </a>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <a class="nav-link" data-bs-toggle="pill" href="#primary-pills-profile" role="tab" aria-selected="false">
+                                    <div class="d-flex align-items-center">
+                                        <div class="tab-icon"><i class='fas fa-audio-description' style="font-size: 20px"></i>
+                                        </div>
+                                        <div class="tab-title ms-2">Description</div>
+                                    </div>
+                                </a>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <a class="nav-link" data-bs-toggle="pill" href="#primary-pills-contact" role="tab" aria-selected="false">
+                                    <div class="d-flex align-items-center">
+                                        <div class="tab-icon"><i class='fas fa-images' style="font-size: 20px"></i>
+                                        </div>
+                                        <div class="tab-title ms-2">Image</div>
+                                    </div>
+                                </a>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <a class="nav-link" data-bs-toggle="pill" href="#primary-pills-detail" role="tab" aria-selected="false">
+                                    <div class="d-flex align-items-center">
+                                        <div class="tab-icon"><i class='fas fa-file-signature' style="font-size: 20px"></i>
+                                        </div>
+                                        <div class="tab-title ms-2">Detail</div>
+                                    </div>
+                                </a>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <a class="nav-link" data-bs-toggle="pill" href="#primary-pills-shipping" role="tab" aria-selected="false">
+                                    <div class="d-flex align-items-center">
+                                        <div class="tab-icon"><i class='fas fa-truck-ramp-box' style="font-size: 20px"></i>
+                                        </div>
+                                        <div class="tab-title ms-2">Shipping</div>
+                                    </div>
+                                </a>
+                            </li>
+                        </ul>
+                        <div class="tab-content" id="pills-tabContent">
+                            <div class="tab-pane fade show active" id="primary-pills-home" role="tabpanel">
+                                <div th:replace="products/product_overview::content"></div>
+                            </div>
+                            <div class="tab-pane fade" id="primary-pills-profile" role="tabpanel">
+                                <th:block th:if="${!#authorization.expression('hasAnyAuthority(''Admin'')') && !#authorization.expression('hasAnyAuthority(''Editor'')')}">
+                                    <th:block th:if="${#authorization.expression('hasAuthority(''Salesperson'')')}">
+                                        <div th:replace="products/product_description_detail::content"></div>
+                                    </th:block>
+                                </th:block>
+
+                                <th:block th:if="${#authorization.expression('hasAnyAuthority(''Admin'')') || #authorization.expression('hasAnyAuthority(''Editor'')')}">
+                                    <div th:replace="products/product_description::content"></div>
+                                </th:block>
+                            </div>
+                            <div class="tab-pane fade" id="primary-pills-contact" role="tabpanel">
+                                <th:block th:if="${!#authorization.expression('hasAnyAuthority(''Admin'')') && !#authorization.expression('hasAnyAuthority(''Editor'')')}">
+                                    <th:block th:if="${#authorization.expression('hasAuthority(''Salesperson'')')}">
+                                        <div class="row">
+                                            <div th:replace="products/product_images_detail::content"></div>
+                                        </div>
+                                    </th:block>
+                                </th:block>
+
+                                <th:block th:if="${#authorization.expression('hasAnyAuthority(''Admin'')') || #authorization.expression('hasAnyAuthority(''Editor'')')}">
+                                    <div th:replace="products/product_images::content"></div>
+                                </th:block>
+                            </div>
+                            <div class="tab-pane fade" id="primary-pills-detail" role="tabpanel">
+                                <th:block th:if="${!#authorization.expression('hasAnyAuthority(''Admin'')') && !#authorization.expression('hasAnyAuthority(''Editor'')')}">
+                                    <th:block th:if="${#authorization.expression('hasAuthority(''Salesperson'')')}">
+                                        <div th:replace="products/product_detail_read_only::content"></div>
+                                    </th:block>
+                                </th:block>
+
+                                <th:block th:if="${#authorization.expression('hasAnyAuthority(''Admin'')') || #authorization.expression('hasAnyAuthority(''Editor'')')}">
+                                    <div th:replace="products/product_detail::content"></div>
+                                    <div>
+                                        <input type="button" class="btn btn-secondary" value="Add More Detail" onclick="addNextDetailSection()" />
+                                    </div>
+                                </th:block>
+                            </div>
+                            <div class="tab-pane fade" id="primary-pills-shipping" role="tabpanel">
+                                <th:block th:if="${!#authorization.expression('hasAnyAuthority(''Admin'')') && !#authorization.expression('hasAnyAuthority(''Editor'')')}">
+                                    <th:block th:if="${#authorization.expression('hasAuthority(''Salesperson'')')}">
+                                        <div th:replace="products/product_shipping_detail::content"></div>
+                                    </th:block>
+                                </th:block>
+
+                                <th:block th:if="${#authorization.expression('hasAnyAuthority(''Admin'')') || #authorization.expression('hasAnyAuthority(''Editor'')')}">
+                                    <div th:replace="products/product_shipping::content"></div>
+                                </th:block>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="text-center">
+                    <input type="submit" value="Save" class="btn btn-primary m-3" />
+                    <input type="button" value="Cancel" class="btn btn-secondary" id="buttonCancel"/>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <footer th:replace="fragments::footer"></footer>
+</div>
+<script type="text/javascript" th:src="@{/js/common.js}"></script>
+
+<script type="text/javascript">
+    function formatCurrency(input) {
+        // Lưu vị trí con trỏ
+        const start = input.selectionStart;
+        const end = input.selectionEnd;
+
+        // Parsing input value
+        let value = input.value.replace(/\D/g, '');
+        // Formatting value
+        value = parseFloat(value).toLocaleString('vi-VN', {
+            style: 'currency',
+            currency: 'VND'
+        });
+
+        // Cập nhật nội dung và khôi phục vị trí con trỏ
+        input.value = value;
+        input.setSelectionRange(start, end);
+    }
+
+    function initializeCurrencyInput() {
+        // Lấy ô input có id là oldPrice
+        const oldPriceInput = document.getElementById('oldPrice');
+        const newPriceInput = document.getElementById('newPrice');
+
+        // Định dạng giá trị mặc định
+        oldPriceInput.value = parseFloat(oldPriceInput.value).toLocaleString('vi-VN', {
+            style: 'currency',
+            currency: 'VND'
+        });
+
+        newPriceInput.value = parseFloat(newPriceInput.value).toLocaleString('vi-VN', {
+            style: 'currency',
+            currency: 'VND'
+        });
+    }
+
+    // Chờ tất cả các phần tử HTML được tải xong rồi mới gọi hàm initializeCurrencyInput
+    document.addEventListener("DOMContentLoaded", function() {
+        initializeCurrencyInput();
+    });
+
+    modelURL = "[[@{/products}]]";
+    brandModuleURL = "[[@{/brands}]]";
+    defaultImageThumbnailImage = "[[@{/images/product_icon.png}]]";
+    dropdownBrands = $("#brand");
+    dropdownCategories = $("#category");
+    $(document).ready(function (){
+        $("#shortDescription").richText();
+        $("#fullDescription").richText();
+
+        dropdownBrands.change(function (){
+            dropdownCategories.empty();
+            getCategories();
+        });
+
+        getCategoriesForNewForm();
+
+        $("#buttonCancel").on("click", function (){
+            window.location = modelURL;
+        });
+
+        $("#fileImage").change(function (){
+            var file = this.files[0];
+            var reader = new FileReader();
+            reader.onload = function (e){
+                $(".thumbnail").attr("src",e.target.result);
+            };
+            reader.readAsDataURL(file);
+        });
+    });
+
+    function getCategoriesForNewForm(){
+        const catIdField = $("#categoryId");
+        let editMode = false;
+        if(catIdField.length){
+            editMode = true;
+        }
+        if(!editMode){
+            getCategories();
+        }
+    }
+
+    function getCategories(){
+        const brandId = dropdownBrands.val();
+        const url = brandModuleURL + "/" + brandId + "/categories";
+        $.get(url,function (responseJson){
+            $("<option class='disabled'>").val(2).text('Choose').appendTo(dropdownCategories);
+            $.each(responseJson,function (index,category){
+                $("<option>").val(category.id).text(category.name).appendTo(dropdownCategories);
+            })
+        });
+    }
+
+    function convertToNumber(input) {
+        return parseFloat(input.value.replace(/\D/g, ''));
+    }
+
+    function checkUnique(form){
+        const url = "[[@{/products/check_unique}]]";
+        const productName = $("#name").val();
+        const productId = $("#id").val();
+        const csrfValue = $("input[name='_csrf']").val();
+        const params = {id : productId , name: productName, _csrf: csrfValue};
+
+        $.post(url,params, function (response){
+            if(response === "OK"){
+                let oldPrice = convertToNumber(document.getElementById('oldPrice'));
+                document.getElementById('oldPrice').value = oldPrice;
+
+                let newPrice = convertToNumber(document.getElementById('newPrice'));
+                document.getElementById('newPrice').value = newPrice;
+                form.submit();
+            } else if(response === "Duplicate"){
+                warning_noti("There is another product having the same name " + productName);
+            } else {
+                error_noti("Unknown response from server");
+            }
+        }).fail(function (){
+            error_noti("Could not connect to the server");
+        });
+        return false;
+    }
+</script>
+<script th:src="@{/js/product_form.js}"></script>
+</body>
+</html>

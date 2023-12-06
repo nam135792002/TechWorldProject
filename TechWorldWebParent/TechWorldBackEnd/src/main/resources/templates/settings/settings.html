@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+
+    <head th:replace="fragments::page_head('Setting - Tech World','tag')"></head>
+    <link rel="stylesheet" th:href="@{/fontawesome/all.css}" />
+    <link rel="stylesheet" th:href="@{/richtext/richtext.min.css}" />
+    <script th:src="@{/richtext/jquery.richtext.min.js}"></script>
+</head>
+<body>
+<div class="wrapper">
+    <!--sidebar wrapper -->
+    <div th:replace="navigation::sidebar_menu"></div>
+    <!--end sidebar wrapper -->
+    <!--start header -->
+    <header th:replace="navigation::header_menu"></header>
+    <!--end header -->
+    <div class="page-wrapper">
+        <div class="page-content">
+            <h6 class="mb-0 text-uppercase">Site Setting</h6>
+            <hr/>
+            <div class="card">
+                <div class="card-body">
+                    <ul class="nav nav-pills mb-3" role="tablist">
+                        <li class="nav-item" role="presentation">
+                            <a class="nav-link active" data-bs-toggle="pill" href="#primary-pills-home" role="tab" aria-selected="true">
+                                <div class="d-flex align-items-center">
+                                    <div class="tab-icon"><i class='fas fa-circle-info' style="font-size: 20px"></i>
+                                    </div>
+                                    <div class="tab-title ms-2">General</div>
+                                </div>
+                            </a>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <a class="nav-link" data-bs-toggle="pill" href="#primary-pills-profile" role="tab" aria-selected="false">
+                                <div class="d-flex align-items-center">
+                                    <div class="tab-icon"><i class='fas fa-audio-description' style="font-size: 20px"></i>
+                                    </div>
+                                    <div class="tab-title ms-2">Mail Server</div>
+                                </div>
+                            </a>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <a class="nav-link" data-bs-toggle="pill" href="#primary-pills-contact" role="tab" aria-selected="false">
+                                <div class="d-flex align-items-center">
+                                    <div class="tab-icon"><i class='fas fa-images' style="font-size: 20px"></i>
+                                    </div>
+                                    <div class="tab-title ms-2">Mail templates</div>
+                                </div>
+                            </a>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <a class="nav-link" data-bs-toggle="pill" href="#primary-pills-detail" role="tab" aria-selected="false">
+                                <div class="d-flex align-items-center">
+                                    <div class="tab-icon"><i class='fas fa-file-signature' style="font-size: 20px"></i>
+                                    </div>
+                                    <div class="tab-title ms-2">Payment</div>
+                                </div>
+                            </a>
+                        </li>
+                    </ul>
+                    <div class="tab-content" id="pills-tabContent">
+                        <div class="tab-pane fade show active" id="primary-pills-home" role="tabpanel">
+                            <div th:replace="settings/general::content"></div>
+                        </div>
+                        <div class="tab-pane fade" id="primary-pills-profile" role="tabpanel">
+                            <div th:replace="settings/mail_server::content"></div>
+                        </div>
+                        <div class="tab-pane fade" id="primary-pills-contact" role="tabpanel">
+                            <div th:replace="settings/mail_templates/mail_templates::content"></div>
+                        </div>
+                        <div class="tab-pane fade" id="primary-pills-detail" role="tabpanel">
+                            <div th:replace="settings/payment::content"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer th:replace="fragments::footer"></footer>
+</div>
+<script type="text/javascript" th:src="@{/js/common.js}"></script>
+<script th:inline="javascript">
+    $(document).ready(function (){
+        if ('[[${message}]]' !== '') {
+            var message = JSON.parse('[[${message}]]');
+            if (message.keyword === 'success') {
+                // Hiển thị thông báo thành công
+                pos5_success_noti(message.content);
+            }
+        }
+    });
+</script>
+<script type="text/javascript">
+    $(document).ready(function (){
+        $("#fileImage").change(function (){
+            var file = this.files[0];
+            var reader = new FileReader();
+            reader.onload = function (e){
+                $(".thumbnail").attr("src",e.target.result);
+            };
+            reader.readAsDataURL(file);
+        });
+
+        $("#customerVerificationContent").richText();
+        $("#orderConfirmationContent").richText({height: 400});
+    });
+</script>
+</body>
+</html>

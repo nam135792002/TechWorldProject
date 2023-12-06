@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div th:fragment="modal_delete" class="modal fade" id="exampleWarningModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-lg modal-dialog-centered">
+    <div class="modal-content bg-warning">
+      <div class="modal-header border-dark">
+        <h5 class="modal-title text-dark">Delete Confirm</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body text-dark">
+        <h3 id="modal-body-content" class="text-center"></h3>
+      </div>
+      <div class="modal-footer border-dark">
+        <button type="button" class="btn btn-light" data-bs-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-dark">Delete</button>
+      </div>
+    </div>
+  </div>
+</div>
+</body>
+</html>

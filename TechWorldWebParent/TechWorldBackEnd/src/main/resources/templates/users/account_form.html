@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments::page_head('Home - TechWorld Admin','none')"></head>
+<body>
+<div class="wrapper">
+    <!--sidebar wrapper -->
+    <div th:replace="navigation::sidebar_menu"></div>
+    <!--end sidebar wrapper -->
+    <!--start header -->
+    <header th:replace="navigation::header_menu"></header>
+    <!--end header -->
+    <div class="page-wrapper">
+        <div class="page-content">
+            <div class="page-breadcrumb d-none d-sm-flex align-items-center mb-3">
+                <div class="breadcrumb-title pe-3">Your Account Details</div>
+            </div>
+            <!--end breadcrumb-->
+
+            <div id="messageContainer" th:if="${message != null}">
+                <p th:text="${message}" style="display: none;"></p>
+            </div>
+
+            <form th:action="@{/account/update}" method="post" th:object="${user}"  enctype="multipart/form-data" id="jQueryValidationForm" novalidate="novalidate">
+                <input type="hidden" th:field="*{id}"/>
+                <div class="container">
+                    <div class="main-body">
+                        <div class="row">
+                            <div class="col-lg-5">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <div class="d-flex flex-column align-items-center text-center">
+                                            <img th:if="${user.photos != null}" th:src="${user.photos}" alt="avatar user" class="rounded-circle p-1 bg-primary thumbnail" width="95" height="105">
+                                            <img th:if="${user.photos == null}" th:src="@{/images/personal.png}" alt="avatar user" class="rounded-circle p-1 bg-primary thumbnail" width="95" height="105">
+                                            <div class="mt-1">
+                                                <h4 th:text="${user.fullName}"></h4>
+                                                <p class="text-secondary mb-1" th:text="${user.role.name}"></p>
+                                            </div>
+                                        </div>
+                                        <div class="mb-3">
+                                            <input type="hidden" th:field="*{photos}"/>
+                                            <label class="form-label">Change avatar</label>
+                                            <input class="form-control" type="file" id="fileImage" name="image" accept="image/png, image/jpeg">
+                                        </div>
+                                        <hr class="my-4" />
+                                        <ul class="list-group list-group-flush">
+                                            <li class="list-group-item d-flex justify-content-between align-items-center flex-wrap">
+                                                <h6 class="mb-0">Email</h6>
+                                                <span class="text-secondary" th:text="${user.email}"></span>
+                                            </li>
+                                            <li class="list-group-item d-flex justify-content-between align-items-center flex-wrap">
+                                                <h6 class="mb-0">Phone</h6>
+                                                <span class="text-secondary" th:text="${user.phoneNumber}"></span>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-7">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <div class="row mb-3">
+                                            <div class="col-sm-3">
+                                                <h6 class="mb-0">Email</h6>
+                                            </div>
+                                            <div class="col-sm-9 text-secondary">
+                                                <input type="text" class="form-control" th:field="*{email}" disabled />
+                                            </div>
+                                        </div>
+
+                                        <div class="row mb-3">
+                                            <div class="col-sm-3">
+                                                <h6 class="mb-0">First Name</h6>
+                                            </div>
+                                            <div class="col-sm-9 text-secondary">
+                                                <input type="text" class="form-control valid" id="input35" th:field="*{firstName}" aria-invalid="false" />
+                                                <label id="input35-error" class="error" for="input35" style="display: none;"></label>
+                                            </div>
+                                        </div>
+
+                                        <div class="row mb-3">
+                                            <div class="col-sm-3">
+                                                <h6 class="mb-0">Last Name</h6>
+                                            </div>
+                                            <div class="col-sm-9 text-secondary">
+                                                <input type="text" class="form-control valid" id="input42" th:field="*{lastName}" aria-invalid="false" />
+                                                <label id="input42-error" class="error" for="input42" style="display: none;"></label>
+                                            </div>
+                                        </div>
+
+                                        <div class="row mb-3">
+                                            <div class="col-sm-3">
+                                                <h6 class="mb-0">Phone Number</h6>
+                                            </div>
+                                            <div class="col-sm-9 text-secondary">
+                                                <input type="text" class="form-control valid" id="input45" th:field="*{phoneNumber}" aria-invalid="false"/>
+                                                <label id="input45-error" class="error" for="input45" style="display: none;"></label>
+                                            </div>
+                                        </div>
+
+                                        <div class="row mb-3">
+                                            <div class="col-sm-3">
+                                                <h6 class="mb-0">Password</h6>
+                                            </div>
+                                            <div class="col-sm-9 text-secondary">
+                                                <input type="password" class="form-control valid validate-equalTo-blur" id="input46" th:field="*{password}" placeholder="Leave blank if you don't to change password" aria-invalid="false"/>
+                                                <label id="input46-error" class="error" for="input46" style="display: none;"></label>
+                                            </div>
+                                        </div>
+
+                                        <div class="row mb-3">
+                                            <div class="col-sm-3">
+                                                <h6 class="mb-0">Confirm Password</h6>
+                                            </div>
+                                            <div class="col-sm-9 text-secondary">
+                                                <input type="password" class="form-control valid" name="confirm_password" placeholder="Confirm Password" aria-invalid="false"/>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-sm-3"></div>
+                                            <div class="col-sm-9 text-secondary">
+                                                <input type="submit" class="btn btn-primary px-4" value="Save Changes" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <footer th:replace="fragments::footer"></footer>
+</div>
+<script type="text/javascript" th:src="@{/js/common.js}"></script>
+<script type="text/javascript" th:src="@{/js/jquery.validate.min.js}"></script>
+<script type="text/javascript" th:src="@{/js/validation-script.js}"></script>
+<script>
+    $(document).ready(function (){
+        $("#fileImage").change(function (){
+            var file = this.files[0];
+            var reader = new FileReader();
+            reader.onload = function (e){
+                $(".thumbnail").attr("src",e.target.result);
+            };
+            reader.readAsDataURL(file);
+        });
+
+        var messageContent = $("#messageContainer p").text();
+        if(messageContent != null && messageContent !== ''){
+            pos5_success_noti(messageContent);
+        }
+    });
+</script>
+</body>
+</html>

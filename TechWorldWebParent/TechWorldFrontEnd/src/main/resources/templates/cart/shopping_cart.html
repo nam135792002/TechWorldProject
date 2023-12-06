@@ -1,0 +1,116 @@
+<!doctype html>
+<html class="no-js" lang="vi" xmlns:th="http://www.thymeleaf.org">
+<header th:replace="fragments::page_head('Shopping Cart', 'none')"></header>
+<body class="sticky-header">
+<a href="#top" class="back-to-top" id="backto-top"><i class="fal fa-arrow-up"></i></a>
+<!-- Start Header -->
+<header class="header axil-header header-style-5">
+    <div id="axil-sticky-placeholder"></div>
+    <div th:replace="fragments::navbar_version_beta"></div>
+    <div th:replace="fragments::advertisement"></div>
+</header>
+<!-- End Header -->
+
+<main class="main-wrapper">
+
+    <!-- Start Cart Area  -->
+    <div class="axil-product-cart-area axil-section-gap" >
+        <div class="container">
+            <div class="axil-product-cart-wrap" th:unless="${#lists.isEmpty(cartItems)}" id="sectionTotal">
+                <div class="product-table-heading">
+                    <h4 class="title">Giỏ Hàng</h4>
+                </div>
+                <div class="table-responsive">
+                    <table class="table axil-product-table axil-cart-table mb--40">
+                        <thead>
+                        <tr>
+                            <th scope="col" class="product-remove"></th>
+                            <th scope="col" class="product-thumbnail">Sản Phẩm</th>
+                            <th scope="col" class="product-title"></th>
+                            <th scope="col" class="product-price">Đơn giá</th>
+                            <th scope="col" class="product-quantity">Số lượng</th>
+                            <th scope="col" class="product-subtotal">Thành tiền</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <th:block th:each="item, status : ${cartItems}">
+                            <tr th:id="'row'+${status.count}">
+                                <td class="product-remove"><a th:rowNumber = "${status.count}" th:href="@{'/cart/remove/'+${item.product.id}}" class="remove-wishlist linkRemove"><i class="fal fa-times"></i></a></td>
+                                <td class="product-thumbnail"><a th:href="@{'/p/' + ${item.product.alias}}" target="_blank"><img th:src="${item.product.mainImage}" width="75px" alt="Digital Product"></a></td>
+                                <td class="product-title"><a th:href="@{'/p/' + ${item.product.alias}}" target="_blank">[[${item.product.name}]]</a></td>
+                                <td class="product-price" data-title="Price" th:text="${#numbers.formatDecimal(item.product.newPrice, 0, 'COMMA', 0, 'POINT')} + 'đ'"></td>
+                                <td class="product-quantity" data-title="Qty">
+                                    <div class="pro-qty-cart-nam">
+                                        <a th:pid="${item.product.id}" class="linkMinus cart-item-quantity" href="">-</a>
+                                        <input type="text" th:id="'quantity'+${item.product.id}" onkeydown="return false;" th:value="${item.quantity}">
+                                        <a th:pid="${item.product.id}" class="linkPlus cart-item-quantity" href="">+</a>
+                                    </div>
+                                </td>
+                                <td class="product-subtotal subtotal" data-title="Subtotal" th:id="'subtotal'+${item.product.id}" th:text="${#numbers.formatDecimal(item.subTotal, 0, 'POINT', 0, 'POINT')} + 'đ'"></td>
+                            </tr>
+                        </th:block>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="cart-update-btn-area">
+                    <div class="input-group product-cupon">
+                        <input placeholder="Enter coupon code" type="text">
+                        <div class="product-cupon-btn">
+                            <button type="submit" class="axil-btn btn-outline">Apply</button>
+                        </div>
+                    </div>
+                    <div class="update-btn">
+                        <a th:href="@{/}" class="axil-btn btn-outline">Tiếp tục mua sắm</a>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xl-5 col-lg-7 offset-xl-7 offset-lg-5">
+                        <div class="axil-order-summery mt--80">
+                            <h5 class="title mb--20">Đơn hàng</h5>
+                            <div class="summery-table-wrap">
+                                <table class="table summery-table mb--30">
+                                    <tbody>
+                                    <tr class="order-subtotal">
+                                        <td>Tổng cộng</td>
+                                        <td id="total" th:text="${#numbers.formatDecimal(estimatedTotal, 0, 'COMMA', 0, 'POINT')} + 'đ'"></td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <a th:href="@{/checkout}" class="axil-btn btn-bg-primary checkout-btn">Thanh Toán</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="sectionEmptyCart" th:class="'text-center' + ${#lists.isEmpty(cartItems) ? '': ' d-none'}">
+                <h3>Giỏ hàng của bạn rỗng.</h3>
+            </div>
+        </div>
+    </div>
+
+    <!-- End Cart Area  -->
+
+</main>
+
+
+<div th:replace="fragments::banner"></div>
+<!-- Start Footer Area  -->
+<footer th:replace="fragments::footer"></footer>
+<!-- End Footer Area  -->
+
+<!-- Header Search Modal End -->
+<div th:replace="fragments::search-product"></div>
+<!-- Header Search Modal End -->
+
+<!-- Product Quick View Modal Start -->
+<div th:replace="fragments::js"></div>
+<script type="text/javascript">
+    modelURL = "[[@{/}]]";
+    const csrfHeaderName = "[[${_csrf.headerName}]]";
+    const csrfValue = "[[${_csrf.token}]]";
+</script>
+<script type="text/javascript" th:src="@{/js/search.js}"></script>
+<script type="text/javascript" th:src="@{/js/shopping_cart.js}"></script>
+</body>
+</html>

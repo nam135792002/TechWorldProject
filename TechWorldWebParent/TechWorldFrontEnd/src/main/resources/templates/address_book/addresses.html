@@ -1,0 +1,88 @@
+<!doctype html>
+<html class="no-js" lang="vi" xmlns:th="http://www.thymeleaf.org">
+<header th:replace="fragments::page_head('Your Address Book', 'none')"></header>
+<body class="sticky-header newsletter-popup-modal">
+<a href="#top" class="back-to-top" id="backto-top"><i class="fal fa-arrow-up"></i></a>
+<!-- Start Header -->
+<header class="header axil-header header-style-5">
+    <div id="axil-sticky-placeholder"></div>
+    <div th:replace="fragments::navbar_version_beta"></div>
+    <div th:replace="fragments::advertisement"></div>
+</header>
+<!-- End Header -->
+
+<main class="main-wrapper">
+    <div class="axil-shop-area axil-section-gap bg-color-white">
+        <div class="container">
+            <div class="text-center">
+                <h2>Địa Chỉ Giao Hàng</h2>
+                <div>
+                    <a th:href="@{/address_book/new}" class="h4">Thêm Địa chỉ mới</a>
+                </div>
+            </div>
+
+            <div class="row m-1">
+                <th:block th:each="address,status : ${listAddresses}">
+                    <div class="col-sm-6 mt-2">
+                        <div class="card" th:classappend="${address.defaultForShipping ? 'bg-warning' : ''}">
+                            <div class="card-header">
+                                <div class="row">
+                                    <div class="col-lg-9">
+                                        <b>Địa chỉ số #[[${status.count + 1}]]</b>
+                                        <th:block th:if="${address.defaultForShipping}">
+                                            <span class="text-danger">[Mặc Định]</span>
+                                        </th:block>
+                                        <th:block th:unless="${address.defaultForShipping}">
+                                            <a th:unless="${param.redirect}" th:href="@{'/address_book/default/'+${address.id}}">[Đặt làm mặc định]</a>
+                                            <a th:if="${param.redirect}" th:href="@{'/address_book/default/'+${address.id} + '?redirect=' + ${param.redirect}}">[Đặt làm mặc định]</a>
+                                        </th:block>
+                                    </div>
+                                    <div class="col-lg-3">
+                                        <div class="float-right">
+                                            <a class="fas fa-edit icon-dark" title="Edit this address" th:href="@{'/address_book/edit/' + ${address.id}}"></a>
+                                            &nbsp;
+                                            <a class="fas fa-trash icon-dark linkDelete" title="Delete this address" th:entityId="${address.id}" th:href="@{'/address_book/delete/' + ${address.id}}"></a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card-body">
+                                [[${address}]]
+                            </div>
+                        </div>
+                    </div>
+                </th:block>
+            </div>
+
+            <th:block th:if="${#lists.isEmpty(listAddresses)}">
+                <div class="text-center">
+                    <h4>Bạn chưa thiết lập địa chỉ giao hàng. Vui lòng thiết lập!</h4>
+                </div>
+            </th:block>
+
+            <div th:unless="${#lists.isEmpty(listAddresses)}" class="mt--35">
+                <a class="axil-btn btn-bg-primary checkout-btn" th:href="@{/checkout}">--> Quay lại trang thanh toán!</a>
+            </div>
+        </div>
+    </div>
+    <div th:replace="fragments::newsletterr"></div>
+</main>
+
+<div th:replace="fragments::banner"></div>
+
+<!-- Start Footer Area  -->
+<footer th:replace="fragments::footer"></footer>
+<!-- End Footer Area  -->
+
+<!-- Header Search Modal End -->
+<div th:replace="fragments::search-product"></div>
+<!-- Header Search Modal End -->
+<div th:replace="fragments::js"></div>
+<script type="text/javascript">
+    modelURL = "[[@{/}]]";
+    const csrfHeaderName = "[[${_csrf.headerName}]]";
+    const csrfValue = "[[${_csrf.token}]]";
+</script>
+<script type="text/javascript" th:src="@{/js/search.js}"></script>
+</body>
+</html>

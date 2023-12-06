@@ -1,0 +1,231 @@
+<!doctype html>
+<html class="no-js" lang="vi" xmlns:th="http://www.thymeleaf.org">
+<header th:replace="fragments::page_head('Tech World - Shop', 'none')"></header>
+<body class="sticky-header newsletter-popup-modal">
+<a href="#top" class="back-to-top" id="backto-top"><i class="fal fa-arrow-up"></i></a>
+<!-- Start Header -->
+<header class="header axil-header header-style-5">
+    <div id="axil-sticky-placeholder"></div>
+    <div th:replace="fragments::navbar_version_beta"></div>
+    <div th:replace="fragments::advertisement"></div>
+</header>
+<main class="main-wrapper">
+    <!-- Start My Account Area  -->
+    <div class="axil-dashboard-area axil-section-gap">
+        <div class="container">
+            <div class="axil-dashboard-warp">
+                <div class="axil-dashboard-author">
+                    <div class="media">
+                        <div class="thumbnail">
+                            <img style="height: 60px;border: 0.5px solid #9b9b9b;border-radius: 50%; padding: 5px;" th:src="@{images/hello_logo.png}" alt="Hello Annie">
+                        </div>
+                        <div class="media-body">
+                            <h5 class="title mb-0">Xin chào, [[${customer.fullName}]]</h5>
+                            <span class="joining-date">TechWorld Member Since [[${customer.updatedTimeOnForm}]]</span>
+                        </div>
+                    </div>
+                </div>
+                <th:block th:if="${#authorization.expression('isAuthenticated()')}">
+                    <form th:action="@{/logout}" method="post" th:hidden="true" name="logoutform">
+                        <input type="submit" />
+                    </form>
+                </th:block>
+                <div class="row">
+                    <div class="col-xl-3 col-md-4">
+                        <aside class="axil-dashboard-aside">
+                            <nav class="axil-dashboard-nav">
+                                <div class="nav nav-tabs" role="tablist">
+                                    <a class="nav-item nav-link active" data-bs-toggle="tab" href="#nav-dashboard" role="tab" aria-selected="true"><i class="fas fa-th-large"></i>Dashboard</a>
+                                    <a class="nav-item nav-link" data-bs-toggle="tab" href="#nav-orders" role="tab" aria-selected="false"><i class="fas fa-shopping-basket"></i>Đơn hàng</a>
+                                    <a class="nav-item nav-link" data-bs-toggle="tab" href="#nav-address" role="tab" aria-selected="false"><i class="fas fa-home"></i>Địa chỉ</a>
+                                    <a class="nav-item nav-link" data-bs-toggle="tab" href="#nav-account" role="tab" aria-selected="false"><i class="fas fa-user"></i>Tài khoản</a>
+                                    <a class="nav-item nav-link" href="javascript:document.logoutform.submit()"><i class="fal fa-sign-out"></i>Đăng xuất</a>
+                                </div>
+                            </nav>
+                        </aside>
+                    </div>
+                    <div class="col-xl-9 col-md-8">
+                        <div class="tab-content">
+                            <div class="tab-pane fade show active" id="nav-dashboard" role="tabpanel">
+                                <div class="axil-dashboard-overview">
+                                    <div class="welcome-text">Xin Chào, [[${customer.fullName}]]</div>
+                                    <p>From your account dashboard you can view your recent orders, manage your shipping and billing addresses, and edit your password and account details.</p>
+                                </div>
+                            </div>
+                            <div class="tab-pane fade" id="nav-orders" role="tabpanel">
+                                <div class="axil-dashboard-order">
+                                    <div class="table-responsive">
+                                        <table class="table" id="example">
+                                            <thead>
+                                            <tr>
+                                                <th scope="col">Hủy</th>
+                                                <th scope="col">Ngày</th>
+                                                <th scope="col">Trạng thái</th>
+                                                <th scope="col">Tổng cộng</th>
+                                                <th scope="col">Chi tiết</th>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+                                            <th:block th:each="order : ${listOrders}">
+                                                <tr>
+                                                    <th scope="row">
+                                                        <th:block th:if="${order.packaged == false && order.canceled == false}">
+                                                            <a class="axil-btn view-btn linkCancelModal" href="" th:classappend="'linkCancel'+${order.id}" title="Cancel this order" th:orderId="${order.id}">Hủy</a>
+                                                        </th:block>
+                                                        <th:block th:if="${(order.isPackaged() && order.isDelivered() == false) || (order.returnRequested == true)}">
+                                                            <a class="axil-btn view-btn " href="javascript:;" >Done</a>
+                                                        </th:block>
+
+                                                        <th:block th:if="${order.returnRequested == false && order.delivered == true && order.returned == false}">
+                                                            <a class="axil-btn view-btn linkReturnOrder" href="" th:classappend="'linkReturn'+${order.id}" title="Return this order" th:orderId="${order.id}" >Trả</a>
+                                                        </th:block>
+
+                                                        <th:block th:if="${order.isCanceled()}">
+                                                            <a class="axil-btn view-btn " href="javascript:;" >Done</a>
+                                                        </th:block>
+                                                    </th>
+
+                                                    <td th:text="${order.updatedTimeOnForm}"></td>
+                                                    <td th:text="${order.status}" th:class="'textOrderStatus'+${order.id}"></td>
+                                                    <td th:text="${#numbers.formatDecimal(order.total, 0, 'POINT', 0, 'POINT')} + 'đ'"></td>
+                                                    <td><a th:href="@{'/orders/detail/'+${order.id}}"  class="axil-btn view-btn linkDetail">Xem</a></td>
+                                                </tr>
+                                            </th:block>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="tab-pane fade" id="nav-address" role="tabpanel">
+                                <div class="axil-dashboard-address">
+                                    <p class="notice-text">Địa chỉ dưới đây sẽ là địa chị mặc định để giao hàng</p>
+                                    <div class="row row--30">
+                                        <div class="col-lg-12">
+                                            <div class="address-info mb--40">
+                                                <div class="addrss-header d-flex align-items-center justify-content-between">
+                                                    <h4 class="title mb-0">Địa chỉ giao hàng</h4>
+                                                    <a th:href="@{/address_book}" class="address-edit" title="Chỉnh sửa"><i class="far fa-edit"></i></a>
+                                                </div>
+                                                <ul class="address-details" th:if="${address != null}">
+                                                    <li>Name: [[${address.fullName}]]</li>
+                                                    <li>Email: [[${address.email}]]</li>
+                                                    <li>Phone: [[${address.phoneNumber}]]</li>
+                                                    <li class="mt--30">[[${address.addreessLine}]] <br>
+                                                        [[${address.provinceWard}]]</li>
+                                                </ul>
+                                                <ul class="address-details" th:if="${address == null}">
+                                                    <li>Vui lòng cập nhật thông tin nhận hàng</li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="tab-pane fade" id="nav-account" role="tabpanel">
+                                <div class="col-lg-9">
+                                    <div class="axil-dashboard-account">
+                                        <form th:action="@{/update_acount_details}" method="post" class="account-details-form" th:object="${customer}">
+                                            <input type="hidden" th:field="*{id}">
+                                            <div class="row">
+                                                <div class="col-lg-6">
+                                                    <div class="form-group">
+                                                        <label>Họ và tên</label>
+                                                        <input type="text" class="form-control" th:field="*{fullName}">
+                                                    </div>
+                                                </div>
+                                                <div class="col-lg-6">
+                                                    <div class="form-group">
+                                                        <label>Số điện thoại</label>
+                                                        <input type="text" class="form-control" th:field="*{phoneNumber}">
+                                                    </div>
+                                                </div>
+                                                <div class="col-lg-12">
+                                                    <div class="form-group">
+                                                        <label>E-mail</label>
+                                                        <input type="text" class="form-control" th:field="*{email}" readonly>
+                                                    </div>
+                                                </div>
+                                                <th:block th:if="${customer.authenticationType.name() == 'DATABASE'}">
+                                                    <div class="col-12">
+                                                        <h5 class="title">Mật khẩu</h5>
+                                                        <div class="form-group">
+                                                            <label>Mật khẩu</label>
+                                                            <input type="password" class="form-control" th:field="*{password}" placeholder="nếu bạn muốn thay đổi, thì hãy nhập mật khẩu mới"
+                                                                   oninput="checkPasswordMatch(document.getElementById('confirmPassword'))" maxlength="14" minlength="6">
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label>Xác nhận mật khẩu mới</label>
+                                                            <input type="password" class="form-control" id="confirmPassword" placeholder="nếu bạn muốn thay đổi, thì hãy nhập mật khẩu mới"
+                                                                   oninput="checkPasswordMatch(this)" maxlength="14" minlength="6">
+                                                        </div>
+                                                    </div>
+                                                </th:block>
+                                                <div class="form-group mb--0">
+                                                    <input type="submit" class="axil-btn" value="Lưu Thay Đổi">
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- End My Account Area  -->
+
+    <div th:replace="fragments::newsletterr"></div>
+</main>
+<div th:replace="fragments::banner"></div>
+<div th:replace="customer/return_order_modal::content"></div>
+<div th:replace="customer/cancel_order_modal::content"></div>
+<footer th:replace="fragments::footer"></footer>
+
+<div class="modal fade" id="exampleLargeModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+
+        </div>
+    </div>
+</div>
+
+<div th:replace="fragments::js"></div>
+<script type="text/javascript">
+    contextPath = "[[@{/}]]";
+    const csrfHeaderName = "[[${_csrf.headerName}]]";
+    const csrfValue = "[[${_csrf.token}]]";
+
+    function checkPasswordMatch(confirmPassword){
+        if(confirmPassword.value !== $("#password").val()){
+            confirmPassword.setCustomValidity("Vui lòng nhập đúng mật khẩu!");
+        } else {
+            confirmPassword.setCustomValidity("");
+        }
+    }
+
+    $(document).ready(function() {
+        $('#example').DataTable({
+            "lengthMenu": [ [5, 10, 25, -1], [5, 10, 25, "All"] ],
+            "pageLength": 5
+        });
+    });
+</script>
+<script th:inline="javascript">
+    $(document).ready(function() {
+        var message = /*[[${message}]]*/ null;
+        if (message !== null && message !== '') {
+            pos5_success_noti(message);
+        }
+
+        $(".linkDetail").on("click",function (e) {
+            e.preventDefault();
+            $('#exampleLargeModal').modal('show').find('.modal-content').load($(this).attr('href'));
+        });
+    });
+</script>
+<script type="text/javascript" th:src="@{/js/cancel_order.js}"></script>
+<script type="text/javascript" th:src="@{/js/return_order.js}"></script>
+</body>
+</html>

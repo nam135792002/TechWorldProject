@@ -1,0 +1,149 @@
+<!doctype html>
+<html class="no-js" lang="vi" xmlns:th="http://www.thymeleaf.org">
+<header th:replace="fragments::page_head('Thanh Toán', 'none')"></header>
+<body class="sticky-header newsletter-popup-modal">
+<a href="#top" class="back-to-top" id="backto-top"><i class="fal fa-arrow-up"></i></a>
+<!-- Start Header -->
+<header class="header axil-header header-style-5">
+    <div id="axil-sticky-placeholder"></div>
+    <div th:replace="fragments::navbar_version_beta"></div>
+    <div th:replace="fragments::advertisement"></div>
+</header>
+<main class="main-wrapper">
+    <!-- Start Checkout Area  -->
+    <div class="axil-checkout-area axil-section-gap">
+        <div class="container">
+            <form th:action="@{/place_order}" method="post">
+                <div class="row">
+                    <div class="col-lg-6">
+                        <div class="axil-checkout-notice">
+                            <div class="axil-toggle-box">
+                                <div class="toggle-bar"><i class="fas fa-pencil"></i> Địa chỉ giao hàng của bạn <a th:href="@{/address_book}" class="toggle-btn">Chỉnh sửa tại đây <i class="fas fa-angle-down"></i></a>
+                                </div>
+
+                                <div class="axil-checkout-coupon mt--10">
+                                    <p>[[${shippingAddress}]]</p>
+                                </div>
+                            </div>
+                        </div>
+                        <th:block th:if="${defaultAddress != null}">
+                            <div class="axil-checkout-billing">
+                                <h4 class="title mb--40">Địa chỉ giao hàng</h4>
+                                <div class="form-group">
+                                    <label>Họ và tên <span>*</span></label>
+                                    <input type="text" th:value="${defaultAddress.fullName}" readonly>
+                                </div>
+                                <div class="form-group">
+                                    <label>Emai </label>
+                                    <input type="text" th:value="${defaultAddress.email}" readonly>
+                                </div>
+                                <div class="form-group">
+                                    <label>Số điện thoại </label>
+                                    <input type="text" th:value="${defaultAddress.phoneNumber}" readonly>
+                                </div>
+                                <div class="row">
+                                    <div class="col-lg-6">
+                                        <div class="form-group">
+                                            <label>Địa chỉ giao hàng <span>*</span></label>
+                                            <input type="text" th:value="${defaultAddress.addressLine}" readonly>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-6">
+                                        <div class="form-group">
+                                            <label>Xã, phường <span>*</span></label>
+                                            <input type="text" th:value="${defaultAddress.ward.name}" readonly>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-lg-6">
+                                        <div class="form-group">
+                                            <label>Quận,huyện <span>*</span></label>
+                                            <input type="text" th:value="${defaultAddress.district.name}" readonly>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-6">
+                                        <div class="form-group">
+                                            <label>Tỉnh, thành <span>*</span></label>
+                                            <input type="text" th:value="${defaultAddress.province.name}" readonly>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label>Notes </label>
+                                    <textarea id="notes" rows="2" name="note" placeholder="Vui lòng cung cấp thông tin cụ thể về đơn hàng(nếu có) "></textarea>
+                                </div>
+                            </div>
+                        </th:block>
+                    </div>
+                    <div class="col-lg-6">
+                        <th:block th:if="${#lists.isEmpty(cartItems)}">
+                            <div class="axil-order-summery order-checkout-summery">
+                                <h5 class="title mb--20">Không có sản phẩm nào cần thanh toán!</h5>
+                            </div>
+                        </th:block>
+                        <th:block th:unless="${#lists.isEmpty(cartItems)}">
+                            <div class="axil-order-summery order-checkout-summery">
+                                <h5 class="title mb--20">Đơn hàng</h5>
+                                <div class="summery-table-wrap">
+                                    <table class="table summery-table">
+                                        <thead>
+                                        <tr>
+                                            <th>Sản phẩm</th>
+                                            <th>Thành tiền</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <th:block th:each="item : ${cartItems}">
+                                            <tr class="order-product">
+                                                <td>[[${item.product.shortName}]] (<span th:text="${#numbers.formatDecimal(item.product.newPrice, 0, 'COMMA', 0, 'POINT')} + 'đ'"></span> <span class="quantity">x[[${item.quantity}]]</span>)</td>
+                                                <td th:text="${#numbers.formatDecimal(item.subTotal, 0, 'COMMA', 0, 'POINT')} + 'đ'"></td>
+                                            </tr>
+                                        </th:block>
+                                        <tr class="order-total">
+                                            <td>Tổng cộng</td>
+                                            <td class="order-total-amount" th:text="${#numbers.formatDecimal(checkoutInfo.productTotal, 0, 'COMMA', 0, 'POINT')} + 'đ'"></td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div class="order-payment-method">
+                                    <div class="single-payment">
+                                        <div class="input-group">
+                                            <input type="radio" id="radio5" name="paymentMethod" value="COD" checked>
+                                            <label for="radio5">Thanh toán khi nhận hàng</label>
+                                        </div>
+                                    </div>
+                                    <div class="single-payment">
+                                        <div class="input-group justify-content-between align-items-center">
+                                            <input type="radio" id="radio6" name="paymentMethod" value="VNPay">
+                                            <label for="radio6">Thanh toán qua ví VNPay</label>
+                                            <img th:src="@{/images/vnpay.png}" style="width: 100px" alt="Paypal payment">
+                                        </div>
+                                    </div>
+                                </div>
+                                <th:block th:if="${defaultAddress != null}">
+                                    <button type="submit" class="axil-btn btn-bg-primary checkout-btn" >Tiến Hành Thanh Toán</button>
+                                </th:block>
+
+                                <th:block th:unless="${defaultAddress != null}">
+                                    <p class="text-center">Vui lòng thiết lập địa chỉ giao hàng để thanh toán</p>
+                                </th:block>
+                            </div>
+                        </th:block>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <!-- End Checkout Area  -->
+
+</main>
+<div th:replace="fragments::banner"></div>
+<!-- Start Footer Area  -->
+<footer th:replace="fragments::footer"></footer>
+<!-- End Footer Area  -->
+<div th:replace="fragments::search-product"></div>
+<div th:replace="fragments::js"></div>
+</body>
+</html>
