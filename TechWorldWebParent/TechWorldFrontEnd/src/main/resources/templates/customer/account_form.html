@@ -181,6 +181,8 @@
 <div th:replace="fragments::banner"></div>
 <div th:replace="customer/return_order_modal::content"></div>
 <div th:replace="customer/cancel_order_modal::content"></div>
+
+<div th:replace="fragments::search-product"></div>
 <footer th:replace="fragments::footer"></footer>
 
 <div class="modal fade" id="exampleLargeModal" tabindex="-1" aria-hidden="true">
@@ -204,13 +206,6 @@
             confirmPassword.setCustomValidity("");
         }
     }
-
-    $(document).ready(function() {
-        $('#example').DataTable({
-            "lengthMenu": [ [5, 10, 25, -1], [5, 10, 25, "All"] ],
-            "pageLength": 5
-        });
-    });
 </script>
 <script th:inline="javascript">
     $(document).ready(function() {
@@ -225,7 +220,16 @@
         });
     });
 </script>
+<script type="text/javascript" th:src="@{/js/search.js}"></script>
 <script type="text/javascript" th:src="@{/js/cancel_order.js}"></script>
 <script type="text/javascript" th:src="@{/js/return_order.js}"></script>
+<script type="text/javascript">
+    $(document).ready(function() {
+        $('#example').DataTable({
+            "lengthMenu": [ [5, 10, 25, -1], [5, 10, 25, "All"] ],
+            "pageLength": 5
+        });
+    });
+</script>
 </body>
 </html>

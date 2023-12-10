@@ -72,7 +72,7 @@
                                 </div>
                                 <div class="product-hover-action">
                                     <ul class="cart-action">
-                                        <li class="wishlist"><a href="javascript:;"><i class="far fa-heart"></i></a></li>
+                                        <li class="wishlist"><a href="javascript:;" th:wid="${product.id}" class="buttonAdd2WishListTwo"><i class="far fa-heart"></i></a></li>
                                         <li class="select-option"><a href="javascript:;" th:pid="${product.id}" class="buttonAdd2CartTwo">Thêm vào giỏ</a></li>
                                         <li class="quickview"><a th:href="@{'/p/' + ${product.alias}}"><i class="far fa-eye"></i></a></li>
                                     </ul>
@@ -192,9 +192,9 @@
                             </div>
                             <div class="product-hover-action">
                                 <ul class="cart-action">
-                                    <li class="wishlist"><a href="#"><i class="far fa-heart"></i></a></li>
-                                    <li class="select-option"><a href="javascript:;" th:pid="${item.id}" class="buttonAdd2CartThree">Add to Cart</a></li>
-                                    <li class="quickview"><a href="#"><i class="far fa-eye"></i></a></li>
+                                    <li class="wishlist"><a href="javascript:;" th:wid="${item.id}" class="buttonAdd2WishListThree"><i class="far fa-heart"></i></a></li>
+                                    <li class="select-option"><a href="javascript:;" th:pid="${item.id}" class="buttonAdd2CartThree">Thêm vào giỏ</a></li>
+                                    <li class="quickview"><a href="${modelURL}p/${item.alias}"><i class="far fa-eye"></i></a></li>
                                 </ul>
                             </div>
                         </div>
@@ -242,5 +242,6 @@
 
 <script th:src="@{/js/search.js}"></script>
 <script th:src="@{/js/add_to_cart_02.js}"></script>
+<script type="text/javascript" th:src="@{/js/add_to_wishlist.js}"></script>
 </body>
 </html>

@@ -59,7 +59,8 @@ public class ShoppingCartRestController {
         try {
             Customer customer = getAuthenticatsCustomer(request);
             cartItemService.removeProduct(productId, customer);
-            return "Sản phẩm đã được xóa khỏi giỏ hàng thành công.";
+            long total = cartItemService.countByCustomer(customer);
+            return "Sản phẩm đã được xóa khỏi giỏ hàng thành công." + "|" + total;
         } catch (CustomerNotFoundException e) {
             return "Bạn cần phải đăng nhập để thêm sản phẩm vào giỏ hàng.";
         }

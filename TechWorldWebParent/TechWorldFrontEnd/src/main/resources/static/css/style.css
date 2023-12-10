@@ -2,3 +2,19 @@
 *.icon-silver {color: silver}
 *.icon-green {color: green}
 *.icon-dark {color: gray}
+
+.header-action .wishlist .wishlist-dropdown-btn .wishlist-count {
+    text-align: center;
+    background-color: var(--color-primary);
+    border: 2px solid var(--color-white);
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--color-white);
+    border-radius: 50%;
+    height: 22px;
+    width: 22px;
+    line-height: 19px;
+    position: absolute;
+    top: -12px;
+    right: -12px;
+}

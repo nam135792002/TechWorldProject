@@ -21,13 +21,13 @@ public class ReviewService {
     @Autowired private OrderDetailRepository orderDetailRepository;
     @Autowired private ProductRepository productRepository;
 
-    public boolean didCustomerReviewProduct(Customer customer, Integer productId){
-        long count = reviewRepository.countByCustomerAndProduct(customer.getId(), productId);
+    public boolean didCustomerReviewProduct(Customer customer, Integer productId, Integer orderId){
+        long count = reviewRepository.countByCustomerAndProduct(customer.getId(), productId, orderId);
         return count > 0;
     }
 
-    public boolean canCustomerReviewProduct(Customer customer, Integer productId){
-        Long count = orderDetailRepository.countByProductAndCustomerAndAndOrderStatus(productId, customer.getId(), OrderStatus.DELIVERED);
+    public boolean canCustomerReviewProduct(Customer customer, Integer productId, Integer orderId){
+        Long count = orderDetailRepository.countByProductAndCustomerAndAndOrderStatus(productId, customer.getId(), OrderStatus.DELIVERED, orderId);
         return count > 0;
     }
 

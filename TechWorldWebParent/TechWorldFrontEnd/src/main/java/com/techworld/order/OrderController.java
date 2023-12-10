@@ -45,11 +45,11 @@ public class OrderController {
             Product product = orderDetail.getProduct();
             Integer productId = product.getId();
 
-            boolean disCustomerReviewProduct = reviewService.didCustomerReviewProduct(customer, productId);
+            boolean disCustomerReviewProduct = reviewService.didCustomerReviewProduct(customer, productId, order.getId());
             product.setReviewByCustomer(disCustomerReviewProduct);
 
             if(!disCustomerReviewProduct){
-                boolean canCustomerReviewProduct = reviewService.canCustomerReviewProduct(customer, productId);
+                boolean canCustomerReviewProduct = reviewService.canCustomerReviewProduct(customer, productId, order.getId());
                 product.setCustomerCanReview(canCustomerReviewProduct);
             }
         }

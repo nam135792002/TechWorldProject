@@ -19,8 +19,9 @@ public class OrderDetailRepositoryTest {
     public void testCountByProductAndCustomerAndOrderStatus(){
         Integer productId = 61;
         Integer customerId = 13;
+        Integer orderId = 12;
 
-        Long count = orderDetailRepository.countByProductAndCustomerAndAndOrderStatus(productId, customerId, OrderStatus.DELIVERED);
+        Long count = orderDetailRepository.countByProductAndCustomerAndAndOrderStatus(productId, customerId, OrderStatus.DELIVERED, orderId);
         Assertions.assertThat(count).isGreaterThan(0);
     }
 }

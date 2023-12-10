@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+
+    <head th:replace="fragments::page_head('Questions - TechWorld Admin','none')"></head>
+    <link rel="stylesheet" th:href="@{/fontawesome/all.css}" />
+</head>
+<body>
+<div class="wrapper">
+    <!--sidebar wrapper -->
+    <div th:replace="navigation::sidebar_menu"></div>
+    <!--end sidebar wrapper -->
+    <!--start header -->
+    <header th:replace="navigation::header_menu"></header>
+    <!--end header -->
+    <div class="page-wrapper">
+        <div class="page-content">
+            <div class="page-breadcrumb d-none d-sm-flex align-items-center mb-3">
+                <div class="breadcrumb-title pe-3">Manage Questions</div>
+            </div>
+
+            <div class="card">
+                <div class="card-body">
+                    <div class="d-lg-flex align-items-center mb-4 gap-3">
+                        <div class="col">
+                            <div class="dropdown">
+                                <button class="btn btn-warning dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                    <i class="bx bx-cloud-download mr-1"></i>Downloads
+                                </button>
+                                <ul class="dropdown-menu" style="">
+                                    <li><a class="dropdown-item" th:href="@{/questions/export/csv}">Export to CSV</a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="table-responsive">
+                        <table class="table mb-0" id="example">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>ID#</th>
+                                    <th>Product</th>
+                                    <th>Asker</th>
+                                    <th>Ask Time</th>
+                                    <th>Approved</th>
+                                    <th>Answered</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr th:each="question : ${listQuestions}">
+                                    <td>[[${question.id}]]</td>
+                                    <td>
+                                        <a th:href="@{'/products/detail/'+${question.product.id}}" class="link-detail-product">
+                                            [[${question.product.shortName}]]
+                                        </a>
+                                    </td>
+                                    <td>
+                                        <a th:href="@{'/customers/detail/'+${question.customer.id}}" class="link-detail-customer">
+                                            [[${question.customer.fullName}]]
+                                        </a>
+                                    </td>
+                                    <td>[[${question.updatedTimeOnForm}]]</td>
+                                    <td>
+                                        <div class="form-check form-switch form-check-info">
+                                            <input th:questionChecked="${question.id}" class="form-check-input userSwitch" type="checkbox" role="switch" th:checked="${question.approvalStatus}"/>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="d-flex align-items-center text-danger">
+                                            <i class='bx bx-radio-circle-marked bx-burst bx-rotate-90 align-middle font-18 me-1'></i>
+                                            <span th:if="${question.answerContent == null or question.answerContent == ''}">NEW</span>
+                                            <span th:if="${question.user != null and question.answerContent != ''}">ANSWERED</span>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="d-flex order-actions">
+                                            <a th:href="@{'/questions/detail/' + ${question.id}}" class="link-detail" title="View question"><i class="bx bx-street-view"></i></a>
+                                            <a th:href="@{'/questions/edit/'+${question.id}}" class="ms-3 link-edit" title="Edit this question"><i class="bx bxs-edit"></i></a>
+                                            <a th:href="@{'/questions/delete/' + ${question.id}}" th:questionId="${question.id}" title="Delete this question" class="ms-3 link-delete"><i class="bx bxs-trash"></i></a>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div th:replace="modal_fragments::modal_delete"></div>
+    <div class="modal fade" id="exampleLargeModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="exampleLargeModal01" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-xl">
+            <div class="modal-content">
+
+            </div>
+        </div>
+    </div>
+    <footer th:replace="fragments::footer"></footer>
+</div>
+<script th:inline="javascript">
+    var contextPath = /*[[@{/}]]*/ '';
+
+    $(document).ready(function() {
+        $(".userSwitch").change(function() {
+            var questionId = $(this).attr("questionChecked");
+            var enabled = $(this).is(":checked");
+            var url = contextPath + 'questions/' + questionId + '/approval/' + enabled;
+            $.ajax({
+                type: 'GET',
+                url: url,
+                success: function(response) {
+                    console.log("Success");
+                    success_noti(response);
+                },
+                error: function(error) {
+                    console.log("Error");
+                    error_noti(error);
+                }
+            });
+        });
+
+        if ('[[${message}]]' !== '') {
+            var message = JSON.parse('[[${message}]]');
+            if (message.keyword === 'success') {
+                // Hiển thị thông báo thành công
+                pos5_success_noti(message.content);
+            } else if (message.keyword === 'error') {
+                // Hiển thị thông báo lỗi
+                pos4_error_noti(message.content);
+            }
+        }
+    });
+
+    $(document).on("click", ".link-delete", function (e) {
+        e.preventDefault();
+        var questionId = $(this).attr("questionId");
+        var deleteUrl = $(this).attr("href");
+
+        $('#exampleWarningModal').modal('show');
+        $("#modal-body-content").text("Are you sure you want to delete this question ID " + questionId);
+
+        $(".btn.btn-dark").on("click", function () {
+            window.location.href = deleteUrl;
+        });
+    });
+</script>
+<script type="text/javascript">
+    modelURL = "[[@{/questions}]]";
+
+    $(document).ready(function (){
+        handleProductDetailLink();
+        handleCustomerDetailLink();
+        handleQuestionDetailLink();
+        handleEditFormQuestionLink();
+    });
+
+    function handleDetailLinkClick(cssClass, modalId){
+        $(cssClass).on("click",function (e){
+            e.preventDefault();
+            linkDetailURL = $(this).attr("href");
+            $(modalId).modal("show").find(".modal-content").load(linkDetailURL);
+        });
+    }
+
+    function handleProductDetailLink(){
+        handleDetailLinkClick(".link-detail-product","#exampleLargeModal01");
+    }
+    
+    function handleQuestionDetailLink() {
+        handleDetailLinkClick(".link-detail","#exampleLargeModal");
+    }
+
+    function handleCustomerDetailLink(){
+        handleDetailLinkClick(".link-detail-customer","#exampleLargeModal");
+    }
+
+    function handleEditFormQuestionLink() {
+        handleDetailLinkClick(".link-edit","#exampleLargeModal");
+    }
+</script>
+<script type="text/javascript" th:src="@{/js/common.js}"></script>
+</body>
+</html>

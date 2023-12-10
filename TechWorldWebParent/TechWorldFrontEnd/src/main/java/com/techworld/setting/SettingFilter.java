@@ -7,6 +7,7 @@ import com.techworld.common.entity.Customer;
 import com.techworld.common.entity.Setting;
 import com.techworld.customer.CustomerNotFoundException;
 import com.techworld.customer.CustomerService;
+import com.techworld.wishlist.WishListService;
 import jakarta.servlet.*;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +21,7 @@ public class SettingFilter implements Filter{
     @Autowired private SettingService settingService;
     @Autowired private CartItemService cartItemService;
     @Autowired private CustomerService customerService;
+    @Autowired private WishListService wishListService;
 
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
@@ -40,6 +42,7 @@ public class SettingFilter implements Filter{
         generalSettings.forEach(setting -> {
             request.setAttribute(setting.getKey(),setting.getValue());
             request.setAttribute("total",cartItemService.countByCustomer(finalCustomer));
+            request.setAttribute("totalWishList", wishListService.countWishListByCustomer(finalCustomer));
         });
         chain.doFilter(request,response);
     }

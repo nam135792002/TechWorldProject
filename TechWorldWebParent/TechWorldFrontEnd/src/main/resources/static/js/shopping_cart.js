@@ -96,7 +96,12 @@ function removeProduct(link){
         rowNumber = link.attr("rowNumber");
         removeProductHTML(rowNumber);
         updatedTotal();
-        anim5_noti(response);
+        var parts = response.split("|");
+        var message = parts[0];
+        var total = parts[1];
+        anim5_noti(message);
+        $("#cart-count-by-customer").text(total);
+        $("#cart-count-by-customer-01").text(total);
     }).fail(function () {
         error_noti("Error while removing product.");
     });

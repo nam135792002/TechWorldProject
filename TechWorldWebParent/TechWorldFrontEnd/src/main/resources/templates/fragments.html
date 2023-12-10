@@ -8,7 +8,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <title>[[${title}]]</title>
 
-  <link rel="icon" th:href="@{/images/logo.png}" type="image/png"/>
+  <link rel="icon" th:href="${SITE_LOGO}" type="image/png"/>
 
   <link th:href="@{/css/bootstrap.min.css}" rel="stylesheet" type="text/css"/>
   <link th:href="@{/css/slick.css}" rel="stylesheet" type="text/css"/>
@@ -42,7 +42,7 @@
       <div class="header-navbar">
         <div class="header-brand">
           <a th:href="@{/}" class="logo logo-dark d-flex align-items-center">
-            <img th:src="@{/images/logo.png}" style="height: 60px; width: 50px;" alt="Site Logo">
+            <img th:src="${SITE_LOGO}" style="height: 60px; width: 50px;" alt="Site Logo">
             <h5 class="ml-2 mb-0">Tech<span class="text-danger">World</span></h5>
           </a>
         </div>
@@ -61,11 +61,10 @@
                 <li class="menu-item-has-children">
                   <a href="#">Cá nhân</a>
                   <ul class="axil-submenu">
-                    <li><a href="#">Yêu thích</a></li>
-                    <li><a href="#">Giỏ hàng</a></li>
-                    <li><a href="#">Thanh toán</a></li>
-                    <li><a href="#">Tài khoản</a></li>
-                    <li><a href="#">Quên mật khẩu</a></li>
+                    <li><a th:href="@{/wishlist}">Yêu thích</a></li>
+                    <li><a th:href="@{/cart}">Giỏ hàng</a></li>
+                    <li><a th:href="@{/checkout}">Thanh toán</a></li>
+                    <li><a th:href="@{/acount_details}">Tài khoản</a></li>
                     <li><a th:href="@{/address_book}">Địa chỉ giao hàng</a></li>
                   </ul>
                 </li>
@@ -90,9 +89,18 @@
               </a>
             </li>
             <li class="wishlist">
-              <a href="#">
-                <i class="flaticon-heart"></i>
-              </a>
+              <th:block th:unless="${#authorization.expression('isAuthenticated()')}">
+                <a href="javascript:;" class="wishlist-dropdown-btn">
+                  <span class="wishlist-count">0</span>
+                  <i class="flaticon-heart"></i>
+                </a>
+              </th:block>
+              <th:block th:if="${#authorization.expression('isAuthenticated()')}">
+                <a th:href="@{/wishlist}" class="wishlist-dropdown-btn">
+                  <span class="wishlist-count" id="wishlist-count-by-customer-01">[[${totalWishList}]]</span>
+                  <i class="flaticon-heart"></i>
+                </a>
+              </th:block>
             </li>
             <li class="shopping-cart">
               <th:block th:unless="${#authorization.expression('isAuthenticated()')}">
@@ -177,11 +185,10 @@
                 <li class="menu-item-has-children">
                   <a href="#">Cá nhân</a>
                   <ul class="axil-submenu">
-                    <li><a href="#">Yêu thích</a></li>
-                    <li><a href="#">Giỏ hàng</a></li>
-                    <li><a href="#">Thanh toán</a></li>
-                    <li><a href="#">Tài khoản</a></li>
-                    <li><a href="#">Quên mật khẩu</a></li>
+                    <li><a th:href="@{/wishlist}">Yêu thích</a></li>
+                    <li><a th:href="@{/cart}">Giỏ hàng</a></li>
+                    <li><a th:href="@{/checkout}">Thanh toán</a></li>
+                    <li><a th:href="@{/acount_details}">Tài khoản</a></li>
                     <li><a th:href="@{/address_book}">Địa chỉ giao hàng</a></li>
                   </ul>
                 </li>
@@ -212,9 +219,18 @@
               </a>
             </li>
             <li class="wishlist">
-              <a href="#">
-                <i class="flaticon-heart"></i>
-              </a>
+              <th:block th:unless="${#authorization.expression('isAuthenticated()')}">
+                <a href="javascript:;" class="wishlist-dropdown-btn">
+                  <span class="wishlist-count">0</span>
+                  <i class="flaticon-heart"></i>
+                </a>
+              </th:block>
+              <th:block th:if="${#authorization.expression('isAuthenticated()')}">
+                <a th:href="@{/wishlist}" class="wishlist-dropdown-btn">
+                  <span class="wishlist-count" id="wishlist-count-by-customer">[[${totalWishList}]]</span>
+                  <i class="flaticon-heart"></i>
+                </a>
+              </th:block>
             </li>
             <li class="shopping-cart">
               <th:block th:unless="${#authorization.expression('isAuthenticated()')}">
@@ -376,7 +392,7 @@
             <h5 class="widget-title">Hỗ trợ</h5>
             <div class="logo mb--30">
               <a href="#">
-                <img class="light-logo" th:src="@{/images/logo.png}" alt="Logo Images">
+                <img class="light-logo" th:src="${SITE_LOGO}" alt="Logo Images">
               </a>
             </div>
             <div class="inner">
@@ -463,7 +479,7 @@
         <div class="col-xl-4 col-lg-12">
           <div class="copyright-left d-flex flex-wrap justify-content-center">
             <ul class="quick-link">
-              <li>© 2023. All rights reserved by <a target="_blank" href="https://axilthemes.com/">Axilthemes</a>.</li>
+              <li>[[${COPYRIGHT}]]</li>
             </ul>
           </div>
         </div>

@@ -8,22 +8,13 @@ import java.util.Date;
 
 @Entity
 @Table(name = "customers")
-public class Customer {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
-
-    @Column(nullable = false, unique = true, length = 45)
-    private String email;
+public class Customer extends PersonalBaseEntity{
 
     @Column(nullable = false, length = 64)
     private String password;
 
     @Column(name = "fullName", nullable = false, length = 45)
     private String fullName;
-
-    @Column(name = "phone_number", nullable = false, length = 15)
-    private String phoneNumber;
 
     @Column(name = "verification_code", length = 64)
     private String verificationCode;
@@ -56,22 +47,6 @@ public class Customer {
         this.authenticationType = authenticationType;
     }
 
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
     public String getPassword() {
         return password;
     }
@@ -86,14 +61,6 @@ public class Customer {
 
     public void setFullName(String fullName) {
         this.fullName = fullName;
-    }
-
-    public String getPhoneNumber() {
-        return phoneNumber;
-    }
-
-    public void setPhoneNumber(String phoneNumber) {
-        this.phoneNumber = phoneNumber;
     }
 
     public String getVerificationCode() {
@@ -132,9 +99,9 @@ public class Customer {
     public String toString() {
         return "Customer{" +
                 "id=" + id +
-                ", email='" + email + '\'' +
+                ", email='" + this.email + '\'' +
                 ", fullName='" + fullName + '\'' +
-                ", phoneNumber='" + phoneNumber + '\'' +
+                ", phoneNumber='" + this.phoneNumber + '\'' +
                 ", createdTime=" + createdTime +
                 '}';
     }

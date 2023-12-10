@@ -6,7 +6,9 @@ import com.techworld.category.CategoryService;
 import com.techworld.common.entity.*;
 import com.techworld.customer.CustomerNotFoundException;
 import com.techworld.customer.CustomerService;
+import com.techworld.question.QuestionService;
 import com.techworld.review.ReviewService;
+import com.techworld.review.vote.ReviewVoteService;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.repository.query.Param;
@@ -31,6 +33,10 @@ public class ProductController {
 
     @Autowired
     private CustomerService customerService;
+    @Autowired
+    private ReviewVoteService reviewVoteService;
+    @Autowired
+    private QuestionService questionService;
 
     @GetMapping("/shopping")
     public String viewShoppingProduct(Model model){
@@ -52,22 +58,23 @@ public class ProductController {
             List<Product> listProduct = productService.findProductByCategory(product.getCategory().getId());
 
             List<Review> listReviews = reviewService.listReviewByProduct(product);
-            Customer customer = getAuthenticatsCustomer(request);
-            if(customer != null){
-                boolean customerReviews = reviewService.didCustomerReviewProduct(customer, product.getId());
 
-                if(customerReviews){
-                    model.addAttribute("customerReviews", customerReviews);
-                } else {
-                    boolean customerCanReview = reviewService.canCustomerReviewProduct(customer, product.getId());
-                    model.addAttribute("customerCanReview",customerCanReview);
-                }
+            Customer customer = getAuthenticatsCustomer(request);
+
+            List<Question> listQuestions = questionService.listQuestionByProduct(product);
+
+            if(customer != null){
+                reviewVoteService.markReviewsVotedForProductByCustomer(listReviews, product.getId(), customer.getId());
+                Question question = new Question();
+                model.addAttribute("question",question);
             }
 
             model.addAttribute("product",product);
             model.addAttribute("listReviews",listReviews);
             model.addAttribute("pageTitle",product.getShortName());
             model.addAttribute("listProduct",listProduct);
+            model.addAttribute("listQuestions",listQuestions);
+
             return "product_detail";
         }catch (ProductNotFoundException e){
             return "error/404";

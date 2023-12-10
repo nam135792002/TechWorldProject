@@ -29,4 +29,9 @@ public class Utility {
         return mailSender;
     }
 
+    public static String getEmailOfAuthenticatedUser(HttpServletRequest request){
+        Object principal = request.getUserPrincipal();
+        if(principal == null) return null;
+        return request.getUserPrincipal().getName();
+    }
 }

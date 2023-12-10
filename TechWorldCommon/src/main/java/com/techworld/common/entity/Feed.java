@@ -8,20 +8,10 @@ import java.util.Date;
 
 @Entity
 @Table(name = "feed_backs")
-public class Feed {
-
-    @Id
-    @GeneratedValue(strategy =  GenerationType.IDENTITY)
-    private Integer id;
+public class Feed extends PersonalBaseEntity{
 
     @Column(name = "full_name", nullable = false, length = 45)
     private String fullName;
-
-    @Column(name = "phone_number", nullable = false, length = 15)
-    private String phoneNumber;
-
-    @Column(name = "email", nullable = false, length = 50)
-    private String email;
 
     @Column(nullable = false, name = "message", columnDefinition = "TEXT")
     private String message;
@@ -35,36 +25,12 @@ public class Feed {
 
     }
 
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
     public String getFullName() {
         return fullName;
     }
 
     public void setFullName(String fullName) {
         this.fullName = fullName;
-    }
-
-    public String getPhoneNumber() {
-        return phoneNumber;
-    }
-
-    public void setPhoneNumber(String phoneNumber) {
-        this.phoneNumber = phoneNumber;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
     }
 
     public String getMessage() {

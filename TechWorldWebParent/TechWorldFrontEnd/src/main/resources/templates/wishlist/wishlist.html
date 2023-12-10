@@ -1,0 +1,71 @@
+<!doctype html>
+<html class="no-js" lang="vi" xmlns:th="http://www.thymeleaf.org">
+<header th:replace="fragments::page_head('Danh sách yêu thích', 'none')"></header>
+<body class="sticky-header newsletter-popup-modal">
+<a href="#top" class="back-to-top" id="backto-top"><i class="fal fa-arrow-up"></i></a>
+<!-- Start Header -->
+<header class="header axil-header header-style-5">
+    <div id="axil-sticky-placeholder"></div>
+    <div th:replace="fragments::navbar_version_beta"></div>
+    <div th:replace="fragments::advertisement"></div>
+</header>
+<main class="main-wrapper">
+
+    <!-- Start Wishlist Area  -->
+    <div class="axil-wishlist-area axil-section-gap">
+        <div class="container">
+            <div class="product-table-heading">
+                <h4 class="title">Danh sách sản phẩm yêu thích của bạn trên TechWorld</h4>
+            </div>
+            <div class="table-responsive" th:unless="${#lists.isEmpty(listWishLists)}">
+                <table id="wishlistTable" class="table axil-product-table axil-wishlist-table">
+                    <thead>
+                    <tr>
+                        <th scope="col" class="product-remove"></th>
+                        <th scope="col" class="product-thumbnail">Sản Phẩm</th>
+                        <th scope="col" class="product-title"></th>
+                        <th scope="col" class="product-price">Đơn giá</th>
+                        <th scope="col" class="product-stock-status">Trạng thái</th>
+                        <th scope="col" class="product-add-cart"></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                        <th:block th:each="wishlist, status : ${listWishLists}">
+                            <tr th:id="'row'+${status.count}">
+                                <td class="product-remove"><a th:rowNumber = "${status.count}" th:href="@{'/wishlist/remove/'+${wishlist.product.id}}" class="remove-wishlist linkRemoveWishList"><i class="fal fa-times"></i></a></td>
+                                <td class="product-thumbnail"><a th:href="@{'/p/' + ${wishlist.product.alias}}"><img th:src="${wishlist.product.mainImage}" alt="Digital Product"></a></td>
+                                <td class="product-title"><a th:href="@{'/p/' + ${wishlist.product.alias}}">[[${wishlist.product.shortName}]]</a></td>
+                                <td class="product-price" data-title="Price" th:text="${#numbers.formatDecimal(wishlist.product.newPrice, 0, 'COMMA', 0, 'POINT')} + 'đ'"></td>
+                                <td class="product-stock-status" data-title="Status" th:if="${wishlist.product.inStock}">Còn hàng</td>
+                                <td class="product-stock-status" data-title="Status" th:unless="${wishlist.product.inStock}">Hết hàng</td>
+                                <td class="product-add-cart"><a th:pid="${wishlist.product.id}" class="buttonAdd2CartTwo axil-btn btn-outline" style="cursor: pointer">Thêm vào giỏ hàng</a></td>
+                            </tr>
+                        </th:block>
+                    </tbody>
+                </table>
+            </div>
+            <div id="sectionEmptyCart" th:class="'text-center' + ${#lists.isEmpty(listWishLists) ? '': ' d-none'}">
+                <h3>Danh sách yêu thích của bạn rỗng.</h3>
+            </div>
+        </div>
+    </div>
+    <!-- End Wishlist Area  -->
+</main>
+
+<div th:replace="fragments::banner"></div>
+<!-- Start Footer Area  -->
+<footer th:replace="fragments::footer"></footer>
+<!-- End Footer Area  -->
+<div th:replace="fragments::search-product"></div>
+<div th:replace="fragments::js"></div>
+
+<script type="text/javascript">
+    modelURL = "[[@{/}]]";
+    const csrfHeaderName = "[[${_csrf.headerName}]]";
+    const csrfValue = "[[${_csrf.token}]]";
+</script>
+<script type="text/javascript" th:src="@{/js/wishlist.js}"></script>
+<script type="text/javascript" th:src="@{/js/add_to_cart_02.js}"></script>
+<script type="text/javascript" th:src="@{/js/search.js}"></script>
+</body>
+</html>

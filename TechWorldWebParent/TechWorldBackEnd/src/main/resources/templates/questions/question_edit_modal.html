@@ -1,0 +1,47 @@
+<div class="modal-header">
+  <h5 class="modal-title">Answer the Question</h5>
+  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+</div>
+<div class="modal-body">
+  <form th:action="@{/questions/save}" method="post" th:object="${question}">
+    <input type="hidden" th:field="*{id}">
+    <div class="row g-3">
+      <div class="col-12">
+        <label for="name" class="form-label">Product</label>
+        <input type="text" class="form-control" readonly th:value="*{product.name}" id="name" />
+      </div>
+      <div class="col-12">
+        <label for="comment" class="form-label">Question</label>
+        <input type="text" class="form-control" th:field="*{questionContent}" id="comment">
+      </div>
+      <div class="col-12">
+        <p style="margin-left: 50px">Asked by: [[${question.customer.fullName}]] on [[${question.updatedTimeOnForm}]]</p>
+      </div>
+      <div class="col-12">
+        <label for="answer" class="form-label">Answer</label>
+        <textarea id="answer" class="form-control" th:field="*{answerContent}"></textarea>
+      </div>
+      <div class="col-12">
+        <label class="form-label">Approved</label>
+        <div class="col-sm-9">
+          <div class="form-check form-switch form-check-success">
+            <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckSuccess" th:field="*{approvalStatus}">
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row">
+      <label class="col-sm-3 col-form-label"></label>
+      <div class="col-sm-9">
+        <div class="d-md-flex d-grid align-items-center gap-3">
+          <button type="submit" class="btn btn-primary px-4" name="submit2">Submit</button>
+          <button type="reset" class="btn btn-danger px-4">Reset</button>
+        </div>
+      </div>
+    </div>
+  </form>
+</div>
+<div class="modal-footer">
+  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+</div>

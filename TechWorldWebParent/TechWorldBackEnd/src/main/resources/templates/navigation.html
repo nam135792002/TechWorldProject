@@ -84,6 +84,8 @@
                     </li>
                     <li th:if="${#authorization.expression('hasAnyAuthority(''Admin'')')}"> <a th:href="@{/reviews}"><i class='bx bx-radio-circle'></i>Review</a>
                     </li>
+                    <li th:if="${#authorization.expression('hasAnyAuthority(''Admin'')')}"> <a th:href="@{/questions}"><i class='bx bx-radio-circle'></i>Question</a>
+                    </li>
                 </ul>
             </li>
         </th:block>

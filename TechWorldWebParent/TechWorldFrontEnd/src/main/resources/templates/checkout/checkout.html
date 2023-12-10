@@ -140,10 +140,13 @@
 
 </main>
 <div th:replace="fragments::banner"></div>
+
+<div th:replace="fragments::search-product"></div>
 <!-- Start Footer Area  -->
 <footer th:replace="fragments::footer"></footer>
 <!-- End Footer Area  -->
 <div th:replace="fragments::search-product"></div>
 <div th:replace="fragments::js"></div>
+<script type="text/javascript" th:src="@{/js/search.js}"></script>
 </body>
 </html>

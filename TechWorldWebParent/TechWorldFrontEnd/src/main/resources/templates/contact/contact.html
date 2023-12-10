@@ -87,6 +87,8 @@
     </div>
     <!-- End Shop Area  -->
 </main>
+
+<div th:replace="fragments::search-product"></div>
 <footer th:replace="fragments::footer"></footer>
 <!-- End Footer Area  -->
 <div th:replace="fragments::js"></div>
@@ -99,5 +101,6 @@
         }
     });
 </script>
+<script type="text/javascript" th:src="@{/js/search.js}"></script>
 </body>
 </html>

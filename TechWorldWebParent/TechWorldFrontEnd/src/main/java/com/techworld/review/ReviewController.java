@@ -2,10 +2,12 @@ package com.techworld.review;
 
 import com.techworld.Utility;
 import com.techworld.common.entity.Customer;
+import com.techworld.common.entity.Order;
 import com.techworld.common.entity.Product;
 import com.techworld.common.entity.Review;
 import com.techworld.customer.CustomerNotFoundException;
 import com.techworld.customer.CustomerService;
+import com.techworld.order.OrderService;
 import com.techworld.product.ProductNotFoundException;
 import com.techworld.product.ProductService;
 import jakarta.servlet.http.HttpServletRequest;
@@ -21,9 +23,10 @@ public class ReviewController {
     @Autowired private ProductService productService;
     @Autowired private CustomerService customerService;
     @Autowired private ReviewService reviewService;
+    @Autowired private OrderService orderService;
 
-    @GetMapping("/write_review/product/{productId}")
-    public String showViewForm(@PathVariable("productId") Integer productId, Model model, HttpServletRequest request) throws ProductNotFoundException, CustomerNotFoundException {
+    @GetMapping("/write_review/product/{productId}/{orderId}")
+    public String showViewForm(@PathVariable("productId") Integer productId, @PathVariable("orderId") Integer orderId ,Model model, HttpServletRequest request) throws ProductNotFoundException, CustomerNotFoundException {
         Review review = new Review();
         Product product = null;
         try {
@@ -34,12 +37,12 @@ public class ReviewController {
 
         Customer customer = getAuthenticatsCustomer(request);
         if(customer != null){
-            boolean customerReviews = reviewService.didCustomerReviewProduct(customer, product.getId());
+            boolean customerReviews = reviewService.didCustomerReviewProduct(customer, product.getId(), orderId);
 
             if(customerReviews){
                 model.addAttribute("customerReviews", customerReviews);
             } else {
-                boolean customerCanReview = reviewService.canCustomerReviewProduct(customer, product.getId());
+                boolean customerCanReview = reviewService.canCustomerReviewProduct(customer, product.getId(), orderId);
                 if(customerCanReview){
                     model.addAttribute("customerCanReview",customerCanReview);
                 }else{
@@ -50,6 +53,7 @@ public class ReviewController {
 
         model.addAttribute("product", product);
         model.addAttribute("review",review);
+        model.addAttribute("order",orderService.getOrder(orderId,customer));
         return "/modal/review_form";
     }
 
@@ -59,18 +63,21 @@ public class ReviewController {
     }
 
     @PostMapping("/post_review")
-    public String saveReview(Model model, Review review, Integer productId, HttpServletRequest request) throws CustomerNotFoundException {
+    public String saveReview(Model model, Review review, Integer productId, Integer orderId, HttpServletRequest request) throws CustomerNotFoundException {
         Customer customer = getAuthenticatsCustomer(request);
 
         Product product = null;
+        Order order = null;
         try {
             product = productService.getProduct(productId);
+            order = orderService.getOrder(orderId,customer);
         }catch (ProductNotFoundException ex){
             return "error/404";
         }
 
         review.setProduct(product);
         review.setCustomer(customer);
+        review.setOrder(order);
 
         Review savedReview = reviewService.save(review);
 

@@ -8,22 +8,9 @@ import java.util.*;
 
 @Entity
 @Table(name = "orders")
-public class Order {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
-
+public class Order extends AddressBaseEntity{
     @Column(name = "full_name", nullable = false, length = 45)
     private String fullName;
-
-    @Column(name = "phone_number", nullable = false, length = 15)
-    private String phoneNumber;
-
-    @Column(name = "email", nullable = false, length = 15)
-    private String email;
-
-    @Column(name = "address_line", nullable = false, length = 64)
-    private String addressLine;
 
     @Column(nullable = false, length = 45)
     private String province;
@@ -44,10 +31,6 @@ public class Order {
     @Enumerated(EnumType.STRING)
     private OrderStatus status;
 
-    @ManyToOne
-    @JoinColumn(name = "customer_id")
-    private Customer customer;
-
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<OrderDetail> orderDetails = new HashSet<>();
 
@@ -61,51 +44,17 @@ public class Order {
     public Order() {
 
     }
-
     public Order(Integer id, Date orderTime, int total) {
         this.id = id;
         this.orderTime = orderTime;
         this.total = total;
     }
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
     public String getFullName() {
         return fullName;
     }
 
     public void setFullName(String fullName) {
         this.fullName = fullName;
-    }
-
-    public String getPhoneNumber() {
-        return phoneNumber;
-    }
-
-    public void setPhoneNumber(String phoneNumber) {
-        this.phoneNumber = phoneNumber;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public String getAddressLine() {
-        return addressLine;
-    }
-
-    public void setAddressLine(String addressLine) {
-        this.addressLine = addressLine;
     }
 
     public String getProvince() {
@@ -164,14 +113,6 @@ public class Order {
         this.status = status;
     }
 
-    public Customer getCustomer() {
-        return customer;
-    }
-
-    public void setCustomer(Customer customer) {
-        this.customer = customer;
-    }
-
     public Set<OrderDetail> getOrderDetails() {
         return orderDetails;
     }
@@ -227,24 +168,8 @@ public class Order {
     }
 
     @Transient
-    public String getDestination(){
-        return addressLine + ", " + ward + ", " + district + ", " + province;
-    }
-
-//    @Transient
-//    public String getProductName(){
-//        String productNames = "";
-//        productNames = "<ul>";
-//        for (OrderDetail detail : orderDetails){
-//            productNames += "<li>" + detail.getProduct().getShortName() + "</li>";
-//        }
-//        productNames += "</ul>";
-//        return productNames;
-//    }
-
-    @Transient
     public String getUpdatedTimeOnForm(){
-        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd' | 'hh:mm:ss");
+        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         return dateFormat.format(this.orderTime);
     }
 
