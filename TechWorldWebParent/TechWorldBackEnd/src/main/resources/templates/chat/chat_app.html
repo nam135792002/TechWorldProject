@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments::page_head('Chat App','none')"></head>
+<body>
+<div class="wrapper">
+    <!--sidebar wrapper -->
+    <div th:replace="navigation::sidebar_menu"></div>
+    <!--end sidebar wrapper -->
+    <!--start header -->
+    <header th:replace="navigation::header_menu"></header>
+    <!--end header -->
+    <div class="page-wrapper">
+        <div class="page-content">
+            <div class="chat-wrapper">
+                <div class="chat-sidebar">
+                    <div class="chat-sidebar-header">
+                        <div class="d-flex align-items-center">
+                            <div class="chat-user-online">
+                                <img th:src="${#authentication.principal.photo}" width="45" height="45" class="rounded-circle" alt="" />
+                            </div>
+                            <div class="flex-grow-1 ms-2">
+                                <p class="mb-0">[[${#authentication.principal.fullname}]]</p>
+                                <p class="d-none" id="email-user">[[${#authentication.principal.email}]]</p>
+                            </div>
+                        </div>
+                        <div class="mb-3"></div>
+                    </div>
+                    <div class="chat-sidebar-content">
+                        <div class="tab-content" id="pills-tabContent">
+                            <div class="tab-pane fade show active" id="pills-Chats">
+                                <div class="chat-list" >
+                                    <div class="list-group list-group-flush" id="listContainer">
+                                        <a href="javascript:;" class="list-group-item active" th:gId="${group.id}"   onclick="formMessageLauch(this, 'group')">
+                                            <div class="d-flex">
+                                                <div class="chat-user-online">
+                                                    <img th:src="@{/images/logo.png}" width="42" height="42" class="rounded-circle" alt="" />
+                                                </div>
+                                                <div class="flex-grow-1 ms-2">
+                                                    <h6 class="mb-0 chat-title" th:text="${group.groupName}"></h6>
+                                                    <p class="mb-0 chat-msg" id="group-message-chat"></p>
+                                                </div>
+                                                <div class="chat-time" id="group-chat-time"></div>
+                                            </div>
+                                        </a>
+                                        <th:block th:each="user : ${listUser}">
+                                            <a href="javascript:;" class="list-group-item user-item" th:uId="${user.id}" th:uName="${user.fullName}" th:uEmail="${user.email}" th:data-avatar="${user.photos}"  onclick="formMessageLauch(this,'user')">
+                                                <div class="d-flex">
+                                                    <div class="chat-user-online">
+                                                        <img th:src="${user.photos}" width="42" height="42" class="rounded-circle" alt="" />
+                                                    </div>
+                                                    <div class="flex-grow-1 ms-2">
+                                                        <h6 class="mb-0 chat-title" th:text="${user.fullName}"></h6>
+                                                        <p class="mb-0 chat-msg"></p>
+                                                    </div>
+                                                    <div class="chat-time"></div>
+                                                </div>
+                                            </a>
+                                        </th:block>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="chat-header d-flex align-items-center">
+                    <div class="chat-toggle-btn"><i class='bx bx-menu-alt-left'></i>
+                    </div>
+                    <div class="d-flex">
+                        <div class="chat-user-online">
+                            <img id="logo-chat" th:src="@{/images/logo.png}" width="42" height="42" class="rounded-circle" alt="" />
+                        </div>
+                        <h4 id="username-chat" class="mb-1 font-weight-bold mt-1 ms-2" th:text="${group.groupName}"></h4>
+                    </div>
+                </div>
+
+                <div class="chat-content" id="formMessageBody">
+
+                </div>
+
+                <div class="chat-footer d-flex align-items-center" id="message-chat">
+
+                </div>
+                <!--start chat overlay-->
+                <div class="overlay chat-toggle-btn-mobile"></div>
+                <!--end chat overlay-->
+            </div>
+        </div>
+    </div>
+
+    <footer th:replace="fragments::footer"></footer>
+</div>
+<script type="text/javascript" th:src="@{/js/common.js}"></script>
+<script type="text/javascript">
+    new PerfectScrollbar('.chat-list');
+    new PerfectScrollbar('.chat-content');
+
+    var email = $("#email-user").text();
+
+    const moduleURL = "[[@{/}]]";
+    const pathImage = "/TechWorldAdmin/images/logo.png";
+</script>
+<script type="text/javascript" th:src="@{/js/chat_message.js}"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.4.0/sockjs.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
+</body>
+</html>

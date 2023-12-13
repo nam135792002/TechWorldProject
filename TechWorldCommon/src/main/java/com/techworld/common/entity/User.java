@@ -31,6 +31,10 @@ public class User extends PersonalBaseEntity{
 	public User() {
 		
 	}
+
+	public User(Integer idUser){
+		id = idUser;
+	}
 	
 	public User(String email, String password, String firstName, String lastName, String phoneNumber) {
 		
@@ -100,6 +104,8 @@ public class User extends PersonalBaseEntity{
 				", role=" + role +
 				'}';
 	}
+
+
 
 	public boolean hasRole(String roleName){
 		if(role.getName().equals(roleName)){

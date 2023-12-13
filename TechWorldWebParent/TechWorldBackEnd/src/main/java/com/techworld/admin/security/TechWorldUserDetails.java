@@ -61,6 +61,10 @@ public class TechWorldUserDetails implements UserDetails {
         return user.getRole().getName();
     }
 
+    public String getEmail(){
+        return user.getEmail();
+    }
+
     public String getPhoto(){
         return user.getPhotos();
     }

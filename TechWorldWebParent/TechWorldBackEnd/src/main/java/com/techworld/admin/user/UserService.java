@@ -124,4 +124,8 @@ public class UserService {
     public long countUser(){
         return userRepo.count();
     }
+
+    public List<User> listNotUser(Integer userId){
+        return userRepo.listUserWithoutUserId(userId);
+    }
 }

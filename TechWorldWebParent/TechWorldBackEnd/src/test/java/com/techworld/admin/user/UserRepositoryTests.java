@@ -123,4 +123,10 @@ public class UserRepositoryTests {
 		Integer id = 1;
 		repo.updateEnabledStatus(id,true);
 	}
+
+	@Test
+	public void testList(){
+		List<User> listUser = repo.listUserWithoutUserId(42);
+		listUser.forEach(System.out::println);
+	}
 }
