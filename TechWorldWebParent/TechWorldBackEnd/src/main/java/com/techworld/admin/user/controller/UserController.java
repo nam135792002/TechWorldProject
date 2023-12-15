@@ -3,11 +3,14 @@ package com.techworld.admin.user.controller;
 import com.cloudinary.Cloudinary;
 import com.cloudinary.utils.ObjectUtils;
 import com.techworld.admin.Message;
+import com.techworld.admin.message.service.GroupMemberService;
 import com.techworld.admin.user.UserNotFoundException;
 import com.techworld.admin.user.UserService;
 import com.techworld.admin.user.export.UserCsvExporter;
 import com.techworld.admin.user.export.UserExcelExporter;
 import com.techworld.admin.user.export.UserPdfExporter;
+import com.techworld.common.entity.Group;
+import com.techworld.common.entity.GroupMember;
 import com.techworld.common.entity.Role;
 import com.techworld.common.entity.User;
 import jakarta.servlet.http.HttpServletResponse;
@@ -33,6 +36,8 @@ public class UserController {
 
     @Autowired
     private Cloudinary cloudinary;
+
+    @Autowired private GroupMemberService groupMemberService;
 
     @GetMapping("/users")
     public String listAll(Model model){
@@ -66,6 +71,7 @@ public class UserController {
                 String img = (String) r.get("secure_url");
                 user.setPhotos(img);
                 User savedUser = userService.save(user);
+                saveUserIntoGroup(savedUser);
             } catch (IOException e){
                 e.printStackTrace();
             }
@@ -74,10 +80,21 @@ public class UserController {
                 user.setPhotos(null);
             }
             User savedUser = userService.save(user);
+            saveUserIntoGroup(savedUser);
         }
         redirectAttributes.addFlashAttribute("message", new Message("success", "The user has been saved successfully."));
 
         return "redirect:/users";
+    }
+
+    private void saveUserIntoGroup(User user){
+        if(groupMemberService.checkUserInDatabase(user)){
+            GroupMember groupMember = new GroupMember();
+
+            groupMember.setGroup(new Group(1));
+            groupMember.setUser(user);
+            groupMemberService.save(groupMember);
+        }
     }
 
     @GetMapping("/users/edit/{id}")

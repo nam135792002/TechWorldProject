@@ -5,7 +5,6 @@ let emailTo = '';
 let isChatGroup = true;
 
 window.onload = function() {
-    alert('hi');
     let socket = new SockJS(moduleURL + 'ws');
     stompClient = Stomp.over(socket);
 
@@ -13,35 +12,82 @@ window.onload = function() {
         stompClient.subscribe('/topic/messages/group', function(response) {
             let data = JSON.parse(response.body);
             let messageGroupTemplateHTML = "";
-            if (data['email'] === email_user_name && isChatGroup) {
-                messageGroupTemplateHTML +=
-                    '<div class="chat-content-rightside">' +
-                    '    <div class="d-flex ms-auto">' +
-                    '        <div class="flex-grow-1 me-2">' +
-                    '            <p class="mb-0 chat-time text-end">you, ' + data['createdTime'] + '</p>' +
-                    '            <p class="chat-right-msg">' + data['message'] + '</p>' +
-                    '        </div>' +
-                    '    </div>' +
-                    '</div>';
+            if (data['email'] === email_user_name ) {
+                if(isChatGroup){
+                    messageGroupTemplateHTML +=
+                        '<div class="chat-content-rightside">' +
+                        '    <div class="d-flex ms-auto">' +
+                        '        <div class="flex-grow-1 me-2">' +
+                        '            <p class="mb-0 chat-time text-end">you, ' + data['createdTime'] + '</p>' +
+                        '            <p class="chat-right-msg">' + data['message'] + '</p>' +
+                        '        </div>' +
+                        '    </div>' +
+                        '</div>';
+                }
+
+                var messageFormat = data.message.slice(0,15) + "...";
+                let messageGroupTemplateHTML01 = "";
+
+                messageGroupTemplateHTML01 = `<a href="javascript:;" class="list-group-item group-item" gId="1"  onclick="formMessageLauch(this, 'group')">
+                                            <div class="d-flex">
+                                                <div class="chat-user-online">
+                                                    <img src="${pathImage}" width="42" height="42" class="rounded-circle" alt="" />
+                                                </div>
+                                                <div class="flex-grow-1 ms-2">
+                                                    <h6 class="mb-0 chat-title">Group_General</h6>
+                                                    <p class="mb-0 chat-msg" id="group-message-chat"></p>
+                                                </div>
+                                                <div class="chat-time" id="group-chat-time"></div>
+                                            </div>
+                                        </a>`;
+                $('#listContainer').find('.group-item[gId="' + 1 + '"]').remove();
+
+                $('#listContainer').prepend(messageGroupTemplateHTML01);
 
                 $("#group-message-chat").text(data['message'].slice(0, 15) + "...");
                 $("#group-message-chat").removeClass("text-warning");
                 $("#group-message-chat").addClass("text-success");
 
-            } else if(isChatGroup && data['email'] !== null) {
-                messageGroupTemplateHTML +=
-                    '<div class="chat-content-leftside">' +
-                    '    <div class="d-flex">' +
-                    '        <img src="' + data['image'] + '" width="48" height="48" class="rounded-circle" alt="" />' +
-                    '        <div class="flex-grow-1 ms-2">' +
-                    '            <p class="mb-0 chat-time">' + data['fullName'] + ', ' + data['createdTime'] + '</p>' +
-                    '            <p class="chat-left-msg">' + data['message'] + '</p>' +
-                    '        </div>' +
-                    '    </div>' +
-                    '</div>';
+                data['email'] = null;
+
+            } else if(data['email'] !== null) {
+                if(isChatGroup){
+                    messageGroupTemplateHTML +=
+                        '<div class="chat-content-leftside">' +
+                        '    <div class="d-flex">' +
+                        '        <img src="' + data['image'] + '" width="48" height="48" class="rounded-circle" alt="" />' +
+                        '        <div class="flex-grow-1 ms-2">' +
+                        '            <p class="mb-0 chat-time">' + data['fullName'] + ', ' + data['createdTime'] + '</p>' +
+                        '            <p class="chat-left-msg">' + data['message'] + '</p>' +
+                        '        </div>' +
+                        '    </div>' +
+                        '</div>';
+                }
+
+                var messageFormat = data.message.slice(0,15) + "...";
+                let messageGroupTemplateHTML01 = "";
+
+                messageGroupTemplateHTML01 = `<a href="javascript:;" class="list-group-item group-item" gId="1"  onclick="formMessageLauch(this, 'group')">
+                                            <div class="d-flex">
+                                                <div class="chat-user-online">
+                                                    <img src="${pathImage}" width="42" height="42" class="rounded-circle" alt="" />
+                                                </div>
+                                                <div class="flex-grow-1 ms-2">
+                                                    <h6 class="mb-0 chat-title">Group_General</h6>
+                                                    <p class="mb-0 chat-msg" id="group-message-chat"></p>
+                                                </div>
+                                                <div class="chat-time" id="group-chat-time"></div>
+                                            </div>
+                                        </a>`;
+                $('#listContainer').find('.group-item[gId="' + 1 + '"]').remove();
+
+                $('#listContainer').prepend(messageGroupTemplateHTML01);
+
                 $("#group-message-chat").text(data['message'].slice(0, 15) + "...");
                 $("#group-message-chat").removeClass("text-success");
                 $("#group-message-chat").addClass("text-warning");
+
+                data['email'] = null;
             }
 
             $("#group-chat-time").text(data['timeFormat']);
@@ -53,7 +99,7 @@ window.onload = function() {
         stompClient.subscribe('/topic/messages/chat', function(response) {
             let data = JSON.parse(response.body);
             let messageGroupTemplateHTML = "";
-            let messageGroupTemplateHTML01 = "";
+
             if (data['emailFrom'] === email_user_name) {
                 messageGroupTemplateHTML +=
                     '<div class="chat-content-rightside">' +
@@ -65,9 +111,10 @@ window.onload = function() {
                     '    </div>' +
                     '</div>';
 
-                /*<![CDATA[*/
                 var messageFormat = data.message.slice(0,15) + "...";
-                messageGroupTemplateHTML01 = `<a href="javascript:;" class="list-group-item user-item" uId="${data.userIdTo}" uName="${data.fullName}" uEmail="${data.emailTo}" data-avatar="${data.avatar}"  onclick="formMessageLauch(this,'user')">
+                let messageGroupTemplateHTML01 = "";
+
+                messageGroupTemplateHTML01 = `<a href="javascript:;" class="list-group-item user-item" uId="${data.userIdTo}" uName="${data.fullName}" uEmail="${data.emailTo}" data-avatar="${data.avartar}"  onclick="formMessageLauch(this,'user')">
                                     <div class="d-flex">
                                         <div class="chat-user-online">
                                             <img src="${data.avartar}" width="42" height="42" class="rounded-circle" alt="" />
@@ -79,25 +126,13 @@ window.onload = function() {
                                         <div class="chat-time">${data.date1}</div>
                                     </div>
                                 </a>`;
-                /*]]>*/
-                $('#listContainer').find('.user-item[uId="' + ${data.userIdTo} + '"]').remove();
+                $('#listContainer').find('.user-item[uId="' + data.userIdTo + '"]').remove();
 
                 $('#listContainer').prepend(messageGroupTemplateHTML01);
 
-            } else if(data['emailTo'] === email_user_name && emailTo === data['emailFrom']){
-                messageGroupTemplateHTML +=
-                    '<div class="chat-content-leftside">' +
-                    '    <div class="d-flex">' +
-                    '        <img src="' + data['avatarTo'] + '" width="48" height="48" class="rounded-circle" alt="" />' +
-                    '        <div class="flex-grow-1 ms-2">' +
-                    '            <p class="mb-0 chat-time">' + data['fullNameTo'] + ', ' + data['date'] + '</p>' +
-                    '            <p class="chat-left-msg">' + data['message'] + '</p>' +
-                    '        </div>' +
-                    '    </div>' +
-                    '</div>';
-
-                /*<![CDATA[*/
+            } else if(data['emailTo'] === email_user_name ){
                 var messageFormat = data.message.slice(0,15) + "...";
+                let messageGroupTemplateHTML01 = "";
                 messageGroupTemplateHTML01 = `<a href="javascript:;" class="list-group-item user-item" uId="${data.userIdFrom}" uName="${data.fullNameTo}" uEmail="${data.emailFrom}" data-avatar="${data.avatarTo}"  onclick="formMessageLauch(this,'user')">
                                     <div class="d-flex">
                                         <div class="chat-user-online">
@@ -110,10 +145,23 @@ window.onload = function() {
                                         <div class="chat-time">${data.date1}</div>
                                     </div>
                                 </a>`;
-                /*]]>*/
-                $('#listContainer').find('.user-item[uId="' + ${data.userIdFrom} + '"]').remove();
+
+                $('#listContainer').find('.user-item[uId="' + data.userIdFrom + '"]').remove();
 
                 $('#listContainer').prepend(messageGroupTemplateHTML01);
+
+                if(emailTo === data['emailFrom'] && !isChatGroup){
+                    messageGroupTemplateHTML +=
+                        '<div class="chat-content-leftside">' +
+                        '    <div class="d-flex">' +
+                        '        <img src="' + data['avatarTo'] + '" width="48" height="48" class="rounded-circle" alt="" />' +
+                        '        <div class="flex-grow-1 ms-2">' +
+                        '            <p class="mb-0 chat-time">' + data['fullNameTo'] + ', ' + data['date'] + '</p>' +
+                        '            <p class="chat-left-msg">' + data['message'] + '</p>' +
+                        '        </div>' +
+                        '    </div>' +
+                        '</div>';
+                }
             }
 
             $('#formMessageBody').append(messageGroupTemplateHTML);
@@ -158,7 +206,6 @@ function sendMessage(type, to) {
 
 
 function formMessageLauch(chatItem, type) {
-    alert('hi');
     let allChatItems = document.querySelectorAll('.list-group-item');
 
     allChatItems.forEach(item => {
