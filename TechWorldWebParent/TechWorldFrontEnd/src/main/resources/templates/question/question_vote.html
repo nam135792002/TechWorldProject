@@ -3,7 +3,7 @@
 <body>
     <div th:fragment="content" th:remove="tag">
         <th:block th:each="question : ${listQuestions}">
-            <li class="comment">
+            <li class="comment" th:if="${question.approvalStatus}">
                 <div class="comment-body">
                     <div>
                         <span style="font-weight: bold; font-size: 18px;">Câu hỏi</span>
