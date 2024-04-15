@@ -28,6 +28,18 @@ public class User extends PersonalBaseEntity{
 	@JoinColumn(name = "role_id")
 	private Role role;
 
+	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+	private Set<GroupMember> groupMembers = new HashSet<>();
+
+	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+	private Set<GroupMessage> groupMessages = new HashSet<>();
+
+	@OneToMany(mappedBy = "fromUser", cascade = CascadeType.ALL, orphanRemoval = true)
+	private Set<MessageMember> messageMembersFrom = new HashSet<>();
+
+	@OneToMany(mappedBy = "toUser", cascade = CascadeType.ALL, orphanRemoval = true)
+	private Set<MessageMember> messageMembersTo = new HashSet<>();
+
 	public User() {
 		
 	}

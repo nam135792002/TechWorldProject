@@ -3,18 +3,18 @@ server:
   servlet:
     context-path: /TechWorld
 spring:
-  datasource:
-    password: Nam@135792002
-    url: jdbc:mysql://localhost:3306/techworld_db
-    username: root
-  jpa:
-    hibernate:
-      ddl-auto: update
-    properties:
-      hibernate:
-        dialect: org.hibernate.dialect.MySQL8Dialect
-        format_sql: true
-    show_sql: false
+#  datasource:
+#    password: Nam@135792002
+#    url: jdbc:mysql://localhost:3306/techworld_db
+#    username: root
+#  jpa:
+#    hibernate:
+#      ddl-auto: update
+#    properties:
+#      hibernate:
+#        dialect: org.hibernate.dialect.MySQL8Dialect
+#        format_sql: true
+#    show_sql: false
 
   security:
     oauth2:
