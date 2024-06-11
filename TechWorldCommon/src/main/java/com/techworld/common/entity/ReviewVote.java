@@ -6,7 +6,7 @@ import jakarta.persistence.*;
 @Table(name = "review_votes")
 public class ReviewVote extends VoteBaseEntity{
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "review_id")
     private Review review;
 

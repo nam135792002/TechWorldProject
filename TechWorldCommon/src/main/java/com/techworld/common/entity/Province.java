@@ -2,6 +2,7 @@ package com.techworld.common.entity;
 
 import jakarta.persistence.*;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -16,8 +17,11 @@ public class Province {
     @Column(nullable = false, length = 64)
     private String name;
 
-    @OneToMany(mappedBy = "province", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "province", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<District> districts;
+
+    @OneToMany(mappedBy = "province", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Address> listAddresses = new ArrayList<>();
 
     public Province() {
     }
@@ -56,5 +60,13 @@ public class Province {
                 "id=" + id +
                 ", name='" + name + '\'' +
                 '}';
+    }
+
+    public List<Address> getListAddresses() {
+        return listAddresses;
+    }
+
+    public void setListAddresses(List<Address> listAddresses) {
+        this.listAddresses = listAddresses;
     }
 }

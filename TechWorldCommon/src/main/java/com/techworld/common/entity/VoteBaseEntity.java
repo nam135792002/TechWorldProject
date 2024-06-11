@@ -12,7 +12,7 @@ public abstract class VoteBaseEntity {
     protected static final int VOTE_DOWN_POINT = -1;
     protected int votes;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "customer_id")
     private Customer customer;
 

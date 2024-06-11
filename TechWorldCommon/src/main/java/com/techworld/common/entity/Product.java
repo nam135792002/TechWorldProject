@@ -49,11 +49,11 @@ public class Product {
     @Column(name = "main_image",nullable = false)
     private String mainImage;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "category_id")
     private Category category;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "brand_id")
     private Brand brand;
 
@@ -62,6 +62,21 @@ public class Product {
 
     @OneToMany(mappedBy = "product",cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ProductDetail> details = new ArrayList<>();
+
+    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<CartItem> listCarts = new ArrayList<>();
+
+    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<OrderDetail> listOrderDetails = new ArrayList<>();
+
+    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Question> listQuestions = new ArrayList<>();
+
+    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Review> listReviews = new ArrayList<>();
+
+    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Wishlist> listWishLists = new ArrayList<>();
 
     private int reviewCount;
     private float averageRating;
@@ -337,5 +352,45 @@ public class Product {
 
     public void setReviewByCustomer(boolean reviewByCustomer) {
         this.reviewByCustomer = reviewByCustomer;
+    }
+
+    public List<CartItem> getListCarts() {
+        return listCarts;
+    }
+
+    public void setListCarts(List<CartItem> listCarts) {
+        this.listCarts = listCarts;
+    }
+
+    public List<OrderDetail> getListOrderDetails() {
+        return listOrderDetails;
+    }
+
+    public void setListOrderDetails(List<OrderDetail> listOrderDetails) {
+        this.listOrderDetails = listOrderDetails;
+    }
+
+    public List<Question> getListQuestions() {
+        return listQuestions;
+    }
+
+    public void setListQuestions(List<Question> listQuestions) {
+        this.listQuestions = listQuestions;
+    }
+
+    public List<Review> getListReviews() {
+        return listReviews;
+    }
+
+    public void setListReviews(List<Review> listReviews) {
+        this.listReviews = listReviews;
+    }
+
+    public List<Wishlist> getListWishLists() {
+        return listWishLists;
+    }
+
+    public void setListWishLists(List<Wishlist> listWishLists) {
+        this.listWishLists = listWishLists;
     }
 }

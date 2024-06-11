@@ -2,9 +2,7 @@ package com.techworld.common.entity;
 
 import jakarta.persistence.*;
 
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.Set;
+import java.util.*;
 
 @Entity
 @Table(name = "users")
@@ -24,7 +22,7 @@ public class User extends PersonalBaseEntity{
 	
 	private boolean enabled;
 	
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "role_id")
 	private Role role;
 
@@ -39,6 +37,9 @@ public class User extends PersonalBaseEntity{
 
 	@OneToMany(mappedBy = "toUser", cascade = CascadeType.ALL, orphanRemoval = true)
 	private Set<MessageMember> messageMembersTo = new HashSet<>();
+
+	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+	private List<Question> listQuestions = new ArrayList<>();
 
 	public User() {
 		
@@ -129,5 +130,45 @@ public class User extends PersonalBaseEntity{
 	@Transient
 	public String getFullName(){
 		return this.firstName + " " + this.lastName;
+	}
+
+	public Set<GroupMember> getGroupMembers() {
+		return groupMembers;
+	}
+
+	public void setGroupMembers(Set<GroupMember> groupMembers) {
+		this.groupMembers = groupMembers;
+	}
+
+	public Set<GroupMessage> getGroupMessages() {
+		return groupMessages;
+	}
+
+	public void setGroupMessages(Set<GroupMessage> groupMessages) {
+		this.groupMessages = groupMessages;
+	}
+
+	public Set<MessageMember> getMessageMembersFrom() {
+		return messageMembersFrom;
+	}
+
+	public void setMessageMembersFrom(Set<MessageMember> messageMembersFrom) {
+		this.messageMembersFrom = messageMembersFrom;
+	}
+
+	public Set<MessageMember> getMessageMembersTo() {
+		return messageMembersTo;
+	}
+
+	public void setMessageMembersTo(Set<MessageMember> messageMembersTo) {
+		this.messageMembersTo = messageMembersTo;
+	}
+
+	public List<Question> getListQuestions() {
+		return listQuestions;
+	}
+
+	public void setListQuestions(List<Question> listQuestions) {
+		this.listQuestions = listQuestions;
 	}
 }

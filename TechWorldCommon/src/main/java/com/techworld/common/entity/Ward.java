@@ -2,6 +2,9 @@ package com.techworld.common.entity;
 
 import jakarta.persistence.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity
 @Table(name = "wards")
 public class Ward {
@@ -10,9 +13,12 @@ public class Ward {
     @GeneratedValue(strategy =  GenerationType.IDENTITY)
     private Integer id;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "district_id")
     private District district;
+
+    @OneToMany(mappedBy = "ward", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Address> listAddresses = new ArrayList<>();
 
     @Column(nullable = false, length = 64)
     private String name;
@@ -51,5 +57,13 @@ public class Ward {
                 ", district=" + district +
                 ", name='" + name + '\'' +
                 '}';
+    }
+
+    public List<Address> getListAddresses() {
+        return listAddresses;
+    }
+
+    public void setListAddresses(List<Address> listAddresses) {
+        this.listAddresses = listAddresses;
     }
 }

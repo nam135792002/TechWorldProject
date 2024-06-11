@@ -7,7 +7,7 @@ public abstract class AddressBaseEntity extends PersonalBaseEntity{
     @Column(name = "address_line", nullable = false, length = 64)
     protected String addressLine;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "customer_id")
     protected Customer customer;
 

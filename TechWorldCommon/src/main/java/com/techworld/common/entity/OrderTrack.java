@@ -16,11 +16,14 @@ public class OrderTrack{
 
     @Column(length = 256)
     private String notes;
+
     private Date updatedTime;
+
     @Enumerated(EnumType.STRING)
     @Column(length = 45, nullable = false)
     private OrderStatus status;
-    @ManyToOne
+
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "order_id")
     private Order order;
 

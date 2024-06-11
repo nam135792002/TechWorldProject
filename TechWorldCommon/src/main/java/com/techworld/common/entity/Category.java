@@ -2,7 +2,9 @@ package com.techworld.common.entity;
 
 import jakarta.persistence.*;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -22,6 +24,9 @@ public class Category {
 
     @ManyToMany(mappedBy = "categories")
     private Set<Brand> brands = new HashSet<>();
+
+    @OneToMany(mappedBy = "category", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Product> listProducts = new ArrayList<>();
 
     public Category() {
 
@@ -85,5 +90,13 @@ public class Category {
     @Override
     public String toString() {
         return name;
+    }
+
+    public List<Product> getListProducts() {
+        return listProducts;
+    }
+
+    public void setListProducts(List<Product> listProducts) {
+        this.listProducts = listProducts;
     }
 }

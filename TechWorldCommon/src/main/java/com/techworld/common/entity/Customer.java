@@ -4,7 +4,9 @@ import jakarta.persistence.*;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @Table(name = "customers")
@@ -21,6 +23,30 @@ public class Customer extends PersonalBaseEntity{
 
     @Column(name = "reset_password_token", length = 30)
     private String resetPasswordToken;
+
+    @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Address> listAddresses = new ArrayList<>();
+
+    @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<CartItem> listCarts = new ArrayList<>();
+
+    @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Order> listOrders = new ArrayList<>();
+
+    @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Question> listQuestions = new ArrayList<>();
+
+    @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<QuestionVote> listQuestionVotes = new ArrayList<>();
+
+    @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Review> listReviews = new ArrayList<>();
+
+    @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<ReviewVote> listReviewVotes = new ArrayList<>();
+
+    @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Wishlist> listWishLists = new ArrayList<>();
 
     private boolean enabled;
 
@@ -110,5 +136,69 @@ public class Customer extends PersonalBaseEntity{
     public String getUpdatedTimeOnForm(){
         DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
         return dateFormat.format(this.createdTime);
+    }
+
+    public List<Address> getListAddresses() {
+        return listAddresses;
+    }
+
+    public void setListAddresses(List<Address> listAddresses) {
+        this.listAddresses = listAddresses;
+    }
+
+    public List<CartItem> getListCarts() {
+        return listCarts;
+    }
+
+    public void setListCarts(List<CartItem> listCarts) {
+        this.listCarts = listCarts;
+    }
+
+    public List<Order> getListOrders() {
+        return listOrders;
+    }
+
+    public void setListOrders(List<Order> listOrders) {
+        this.listOrders = listOrders;
+    }
+
+    public List<Question> getListQuestions() {
+        return listQuestions;
+    }
+
+    public void setListQuestions(List<Question> listQuestions) {
+        this.listQuestions = listQuestions;
+    }
+
+    public List<QuestionVote> getListQuestionVotes() {
+        return listQuestionVotes;
+    }
+
+    public void setListQuestionVotes(List<QuestionVote> listQuestionVotes) {
+        this.listQuestionVotes = listQuestionVotes;
+    }
+
+    public List<Review> getListReviews() {
+        return listReviews;
+    }
+
+    public void setListReviews(List<Review> listReviews) {
+        this.listReviews = listReviews;
+    }
+
+    public List<ReviewVote> getListReviewVotes() {
+        return listReviewVotes;
+    }
+
+    public void setListReviewVotes(List<ReviewVote> listReviewVotes) {
+        this.listReviewVotes = listReviewVotes;
+    }
+
+    public List<Wishlist> getListWishLists() {
+        return listWishLists;
+    }
+
+    public void setListWishLists(List<Wishlist> listWishLists) {
+        this.listWishLists = listWishLists;
     }
 }

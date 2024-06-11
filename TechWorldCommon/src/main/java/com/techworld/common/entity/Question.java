@@ -4,7 +4,9 @@ import jakarta.persistence.*;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @Table(name = "questions")
@@ -14,11 +16,11 @@ public class Question {
     @GeneratedValue(strategy =  GenerationType.IDENTITY)
     private Integer id;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "product_id")
     private Product product;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "customer_id")
     private Customer customer;
 
@@ -31,9 +33,12 @@ public class Question {
     @Column(name = "answer_content", length = 500)
     private String answerContent;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;
+
+    @OneToMany(mappedBy = "question", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<QuestionVote> listQuestionVotes = new ArrayList<>();
 
     @Column(name = "answer_time")
     private Date answerTime;
@@ -157,5 +162,14 @@ public class Question {
 
     public void setDownvotedByCurrentCustomer(boolean downvotedByCurrentCustomer) {
         this.downvotedByCurrentCustomer = downvotedByCurrentCustomer;
+    }
+
+
+    public List<QuestionVote> getListQuestionVotes() {
+        return listQuestionVotes;
+    }
+
+    public void setListQuestionVotes(List<QuestionVote> listQuestionVotes) {
+        this.listQuestionVotes = listQuestionVotes;
     }
 }

@@ -38,6 +38,9 @@ public class Order extends AddressBaseEntity{
     @OrderBy("updatedTime ASC")
     private List<OrderTrack> orderTracks = new ArrayList<>();
 
+    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Review> listReviews = new ArrayList<>();
+
     @Column(columnDefinition = "TEXT")
     private String note;
 
@@ -216,5 +219,13 @@ public class Order extends AddressBaseEntity{
             }
         }
         return false;
+    }
+
+    public List<Review> getListReviews() {
+        return listReviews;
+    }
+
+    public void setListReviews(List<Review> listReviews) {
+        this.listReviews = listReviews;
     }
 }

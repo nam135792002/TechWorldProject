@@ -4,13 +4,14 @@ import jakarta.persistence.*;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Objects;
 
 @Entity
 @Table(name = "reviews")
 public class Review{
-
     @Id
     @GeneratedValue(strategy =  GenerationType.IDENTITY)
     private Integer id;
@@ -28,17 +29,20 @@ public class Review{
     @Column(nullable = false)
     private Date reviewTime;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "product_id")
     private Product product;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "customer_id")
     private Customer customer;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "order_id")
     private Order order;
+
+    @OneToMany(mappedBy = "review", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<ReviewVote> listReviewVotes = new ArrayList<>();
 
     @Transient
     private boolean upvotedByCurrentCustomer;
@@ -169,5 +173,13 @@ public class Review{
     @Override
     public int hashCode() {
         return Objects.hash(getId());
+    }
+
+    public List<ReviewVote> getListReviewVotes() {
+        return listReviewVotes;
+    }
+
+    public void setListReviewVotes(List<ReviewVote> listReviewVotes) {
+        this.listReviewVotes = listReviewVotes;
     }
 }
