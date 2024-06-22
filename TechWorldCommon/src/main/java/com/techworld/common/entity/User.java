@@ -22,7 +22,7 @@ public class User extends PersonalBaseEntity{
 	
 	private boolean enabled;
 	
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne
 	@JoinColumn(name = "role_id")
 	private Role role;
 
